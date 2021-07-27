@@ -1,0 +1,219 @@
+body{
+  font-family: 'Zen Loop', cursive;
+  background-color: #323232;
+  color: white;
+}
+
+.header{
+  background-color: #F0FFF0;
+  border:2px solid black;
+  color:red;
+  display: flex;
+  justify-content: space-around;
+}
+
+.lgout{
+  justify-content: right;
+}
+
+.head{
+  margin: 10px;
+}
+
+.login{
+  background-color: #4CAF50;
+  border: none;
+  color: white;
+  padding: 10px;
+  border-radius: 4px;
+  margin: 10px;
+  cursor: pointer;
+}
+
+.login:hover{
+  background-color: #854D3E;
+  border: none;
+  color: white;
+  padding: 10px;
+  border-radius: 4px;
+  margin: 10px;
+  cursor: pointer;
+}
+
+h2{
+  text-align:center;
+  color:white;
+}
+
+.start{
+  text-align:center;
+  border:2px solid green;
+  color:white;
+  justify-content: space-around;
+}
+
+input[type=text] {
+  padding: 2px 2px;
+  border: none;
+  border-radius: 4px;
+  background-color: #f1f1f1;
+  margin: 5px;
+}
+
+.hide{
+  display:none;
+}
+
+select{
+  width: 20%;
+  padding: 2px 2px;
+  border: none;
+  border-radius: 4px;
+  background-color: #f1f1f1;
+}
+
+ul {
+  display: flex;
+  flex-direction: column-reverse;
+}
+li {
+    flex: 0 0 auto;
+    font-family: monospace;
+}
+li:nth-last-of-type(n+20) {
+  display: none;
+}
+
+.btn{
+  background-color: #4CAF50;
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 4px;
+  text-decoration: none;
+  margin: 4px 2px;
+  cursor: pointer;
+}
+
+.btn:hover{
+  background-color: #854D3E;
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 4px;
+  text-decoration: none;
+  margin: 4px 2px;
+  cursor: pointer;
+}
+
+.img{
+  width: 50;
+  height: 70;
+  border: 1px solid white;
+  margin-left: 2px;
+  margin-right: 2px;
+}
+
+.active{
+  width: 50px;
+  height: 70px;
+  border: 1px solid white;
+  margin-left: 2px;
+  margin-right: 2px;
+}
+
+.active:hover{
+  width: 55px;
+  height: 70px;
+  border: 1px solid white;
+}
+
+.button {
+  background-color: black;
+  border: 0px solid black;
+}
+
+.bot{
+  text-align: center;
+  border: 1px solid white;
+  padding-bottom: 10px;
+}
+
+.player1 {
+  grid-area: player1;
+  text-align: center;
+  border: 1px solid white;
+  padding-bottom: 10px;
+  border-radius:40px;
+}
+.player2 {
+  grid-area: player2;
+  text-align: center;
+  border: 1px solid white;
+  padding-bottom: 10px;
+  border-radius:40px;
+}
+.player3 {
+  grid-area: player3;
+  text-align: center;
+  border: 1px solid white;
+  padding-bottom: 10px;
+  border-radius:40px;
+}
+.player4 {
+  grid-area: player4;
+  text-align: center;
+  border: 1px solid white;
+  padding-bottom: 10px;
+  border-radius:40px;
+}
+
+.mid{
+  grid-area: mid;
+  text-align: center;
+  border: 1px solid red;
+  margin: 20px;
+  border-radius: 40px;
+  padding-bottom: 10px;
+  padding-top: 10px;
+}
+
+.container {
+  display: grid;
+  grid-template-columns: auto;
+  grid-template-rows: auto;
+  grid-template-areas:
+    ". . player3 player3 . ."
+    ". . player3 player3 . ."
+    "player2 player2 mid mid player4 player4"
+    "player2 player2 mid mid player4 player4"
+    ". . player1 player1 . ."
+    ". . player1 player1 . .";
+}
+
+.messages {
+  float: right;
+  height: 400px;
+  width: 300px;
+  background-color: white;
+  color: black;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+#message{
+  width: 75%;
+  height: 40px;
+  padding-left: 10px;
+  border: 1px solid green;
+}
+
+#sendMessage{
+  height: 40px;
+  padding: 10px;
+  border: none;
+  background-color: green;
+  border-radius: 5px;
+  color: white;
+  cursor: pointer;
+}
