@@ -84,7 +84,7 @@ li:nth-last-of-type(n+20) {
   display: none;
 }
 
-.btn{
+.btn{ 
   background-color: #4CAF50;
   border: none;
   color: white;
