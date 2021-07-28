@@ -137,7 +137,7 @@ select{
 }
 
 .img{
-  width: 80;
+  width: 70;
   height: 100;
   border: 1px solid var(--white);
   margin-left: 2px;
@@ -165,33 +165,40 @@ select{
   z-index: 1;
 }
 
+.img-stack-others{
+  position: absolute;
+  border: 1px solid #b9ab8e;
+  transform-origin: center 100%;
+  transition: transform .5s ease-out;
+}
+
 
 .player1 {
   grid-area: player1;
   text-align: center;
   border: 1px solid var(--white);
-  padding-bottom: 10px;
+  padding-bottom: 250px;
   border-radius:40px;
 }
 .player2 {
   grid-area: player2;
   text-align: center;
   border: 1px solid var(--white);
-  padding-bottom: 10px;
+  padding-bottom: 150px;
   border-radius:40px;
 }
 .player3 {
   grid-area: player3;
   text-align: center;
   border: 1px solid var(--white);
-  padding-bottom: 10px;
+  padding-bottom: 150px;
   border-radius:40px;
 }
 .player4 {
   grid-area: player4;
   text-align: center;
   border: 1px solid var(--white);
-  padding-bottom: 10px;
+  padding-bottom: 150px;
   border-radius:40px;
 }
 
@@ -219,22 +226,31 @@ select{
 }
 
 .messages {
-  float: right;
-  height: 450px;
-  width: 300px;
+  display: none;
+  position: fixed;
   background-color: var(--white);
   color: var(--black);
   padding: 10px;
   border-radius: 10px;
+  bottom: 20px;
+  right: 15px;
+  z-index: 9;
+  width: 320px;
 }
 
 ul {
-  display: flex;
-  flex-direction: column-reverse;
+  list-style-type: none;
+  -webkit-padding-start: 0;
 }
 li {
-    flex: 0 0 auto;
-    font-family: monospace;
+  flex: 0 0 auto;
+  font-family: monospace;
+  background-color: var(--black);
+  color: var(--white);
+  margin: 3px;
+  padding: 5px;
+  border: none;
+  border-radius: 10px;
 }
 li:nth-last-of-type(n+15) {
   display: none;
@@ -242,9 +258,13 @@ li:nth-last-of-type(n+15) {
 
 #message{
   width: 75%;
+  background-color: white;
   height: 40px;
-  padding-left: 10px;
+  padding: 10px;
   border: 1px solid var(--blue);
+  resize: none;
+  border-radius: 5px;
+  overflow: hidden;
 }
 
 #sendMessage{
@@ -259,4 +279,40 @@ li:nth-last-of-type(n+15) {
 
 #sendMessage:hover{
   background-color: var(--ash);
+}
+
+.open-button {
+  background-color: var(--white);
+  border: none;
+  font-weight: bold;
+  color: var(--black);
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  position: fixed;
+  bottom: 23px;
+  right: 28px;
+  width: 280px;
+}
+.open-button:hover{
+  background-color: var(--blue);
+  color: var(--white);
+}
+
+.close{
+  background-color: red;
+  border: none;
+  color: var(--white);
+  padding: 10px 20px;
+  border-radius: 5px;
+  text-decoration: none;
+  cursor: pointer;
+  width: 300px;
+}
+.close:hover{
+  background-color: var(--blue);
+}
+
+.hide{
+  display: none;
 }

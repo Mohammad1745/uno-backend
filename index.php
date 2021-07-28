@@ -51,7 +51,7 @@
     </div>
     <br>
 
-    <div class="intro">
+    <div class="intro hide">
       <div>
         <img class="intro-img" src="img/uno.png" alt="">
       </div>
@@ -61,8 +61,8 @@
     </div>
 
 
-     <div class="start" id="start">
-       <div class="">
+     <div class="start hide" id="start">
+       <div class="create-game">
          <form>
            <label for="serverId">Game ID:</label>
            <input type="text" name="serverId" id="serverId" placeholder="abc12"><br>
@@ -84,7 +84,7 @@
          </form>
        </div>
 
-       <div class="">
+       <div class="join-game">
          <form>
            <label for="severId">Game ID:</label>
            <input type="text" name="serverId" id="serverId" placeholder="abc12"><br>
@@ -96,7 +96,7 @@
      </div>
 
 
-     <div class="container">
+     <div class="container ide">
        <div class="player1">
          <h2>You</h2>
          <?php
@@ -116,7 +116,7 @@
          <h2>Player 2</h2>
          <?php
             for ($x = 0; $x < count($bot2); $x++) {?>
-              <img class="img" src="img/<?php echo $bot2[$x]; ?>.png">
+                <img class="img-stack-others img" src="img/uno.png" style="transform: rotate(<?php echo ($x-((count($bot2)-1)/2))*20; ?>deg);">
         <?php    }
           ?>
 
@@ -125,7 +125,7 @@
          <h2>Player 3</h2>
          <?php
             for ($x = 0; $x < count($bot3); $x++) {?>
-              <img class="img" src="img/<?php echo $bot3[$x]; ?>.png">
+                <img class="img-stack-others img" src="img/uno.png" style="transform: rotate(<?php echo ($x-((count($bot3)-1)/2))*20; ?>deg);">
         <?php    }
           ?>
 
@@ -134,7 +134,7 @@
          <h2>Player 4</h2>
          <?php
             for ($x = 0; $x < count($bot4); $x++) {?>
-              <img class="img" src="img/<?php echo $bot4[$x]; ?>.png">
+                <img class="img-stack-others img" src="img/uno.png" style="transform: rotate(<?php echo ($x-((count($bot4)-1)/2))*20; ?>deg);">
         <?php    }
           ?>
 
@@ -152,16 +152,20 @@
      </div>
 
 
+    <div class="ide">
+      <div class="messages" id="messages">
+        <ul id="msgs"></ul>
 
-    <div class="messages">
-      <form>
-        <input type="text" id="message" placeholder="Enter message" autocomplete="off">
-        <button type="button" id="sendMessage" class"sendMessage">Send</button>
-      </form>
+        <form style="text-align: center;">
+          <input type="text" id="message" placeholder="Enter message" autocomplete="off">
+          <button type="button" id="sendMessage" class"sendMessage">Send</button>
+        </form>
+        <button type="button" class="close" onclick="closeForm()">Close</button>
+      </div>
 
-    <ul id="msgs"></ul>
-
+      <button class="open-button" onclick="openForm()">Chat</button>
     </div>
+
 
 
 

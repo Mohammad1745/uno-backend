@@ -73,3 +73,12 @@ database.ref('/chats').on('child_added', function (snapshot){
 
   document.getElementById("msgs").innerHTML += html;
 });
+
+
+function openForm() {
+  document.getElementById("messages").style.display = "block";
+}
+
+function closeForm() {
+  document.getElementById("messages").style.display = "none";
+}
