@@ -25,6 +25,7 @@ body{
   background-color: var(--black);
   color: var(--white);
   font-size: 20px;
+  font-weight: bold;
 }
 
 
@@ -67,7 +68,7 @@ body{
 
 .intro{
   display: flex;
-  justify-content: space-around;
+  justify-content: center;
   align-items: center;
   margin-bottom: 20px;
 }
@@ -75,7 +76,9 @@ body{
   width: 70%;
   border: 1px solid var(--white);
 }
+.intro-text{
 
+}
 
 h2{
   text-align:center;
@@ -134,25 +137,11 @@ select{
 }
 
 .img{
-  width: 50;
-  height: 70;
+  width: 80;
+  height: 100;
   border: 1px solid var(--white);
   margin-left: 2px;
   margin-right: 2px;
-}
-
-.active{
-  width: 50px;
-  height: 70px;
-  border: 1px solid var(--white);
-  margin-left: 2px;
-  margin-right: 2px;
-}
-
-.active:hover{
-  width: 55px;
-  height: 70px;
-  border: 1px solid var(--white);
 }
 
 .button {
@@ -165,6 +154,17 @@ select{
   border: 1px solid var(--white);
   padding-bottom: 10px;
 }
+
+.img-stack{
+  position: absolute;
+  border: 1px solid #b9ab8e;
+  transform-origin: center 200%;
+  transition: transform .5s ease-out;
+}
+.img-stack:hover {
+  z-index: 1;
+}
+
 
 .player1 {
   grid-area: player1;

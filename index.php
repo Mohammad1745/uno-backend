@@ -55,8 +55,8 @@
       <div>
         <img class="intro-img" src="img/uno.png" alt="">
       </div>
-      <div class="intro-text">
-        <p>UNO-LIMITED is a free web application to play UNO.</p>
+      <div class="">
+        <p class="intro-text">UNO-LIMITED is a free web application to play UNO. Have fun with your friends in this pendamic. This is developed as a fun project.</p>
       </div>
     </div>
 
@@ -103,10 +103,10 @@
             for ($x = 0; $x < count($my_cards); $x++) {
               if (($last[0][0] == $my_cards[$x][0]) or ($last[0][1] == $my_cards[$x][1]) or ($my_cards[$x][1] == "C")) {
               ?>
-              <a href="#"><img src="img/<?php echo $my_cards[$x]; ?>.png" class="active"></a>
+              <a href="#"><img src="img/<?php echo $my_cards[$x]; ?>.png" class="img img-stack" style="transform: rotate(<?php echo ($x-((count($my_cards)-1)/2))*20; ?>deg);"></a>
         <?php    }
         else { ?>
-          <img class="img" src="img/<?php echo $my_cards[$x]; ?>.png">
+          <img class="img-stack img" src="img/<?php echo $my_cards[$x]; ?>.png" style="transform: rotate(<?php echo ($x-((count($my_cards)-1)/2))*20; ?>deg);">
           <?php
         } }
           ?>
