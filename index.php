@@ -51,21 +51,27 @@
     </div>
     <br>
 
-    <div class="intro hide">
+    <div class="intro ide">
       <div>
         <img class="intro-img" src="img/uno.png" alt="">
       </div>
       <div class="">
-        <p class="intro-text">UNO-LIMITED is a free web application to play UNO. Have fun with your friends in this pendamic. This is developed as a fun project.</p>
+        <p class="intro-text">
+          UNO-LIMITED is a free web application to play UNO. Have fun with your friends in this pendamic. This is developed as a fun project.
+          <br><br>
+          Create a unique game id of maximum 6 characters and share it with your friends. Or join games with game id created by your friend.
+        </p>
       </div>
     </div>
 
 
-     <div class="start hide" id="start">
+     <div class="start ide" id="start">
        <div class="create-game">
          <form>
+           <label for="userId">Nickname:</label>
+           <input type="text" maxlength="10" name="userId" id="userId"><br>
            <label for="serverId">Game ID:</label>
-           <input type="text" name="serverId" id="serverId" placeholder="abc12"><br>
+           <input type="text" maxlength="6" name="serverId" id="serverId" placeholder="abc12"><br>
            <label for="numPlayer">Number of players:</label>
            <select name="numPlayer" id="numPlayer">
                <option value="2">2</option>
@@ -86,8 +92,10 @@
 
        <div class="join-game">
          <form>
+           <label for="userId">Nickname:</label>
+           <input type="text" maxlength="10" name="userId" id="userId"><br>
            <label for="severId">Game ID:</label>
-           <input type="text" name="serverId" id="serverId" placeholder="abc12"><br>
+           <input type="text" maxlength="6" name="serverId" id="serverId" placeholder="abc12"><br>
            <button id="staBtn" class="btn">Join Game</button>
          </form>
        </div>
@@ -96,7 +104,7 @@
      </div>
 
 
-     <div class="container ide">
+     <div class="container hide">
        <div class="player1">
          <h2>You</h2>
          <?php
@@ -152,7 +160,7 @@
      </div>
 
 
-    <div class="ide">
+    <div class="hide">
       <div class="messages" id="messages">
         <ul id="msgs"></ul>
 
@@ -167,6 +175,9 @@
     </div>
 
 
+<div class="footer">
+  Some text, maybe later.
+</div>
 
 
 
