@@ -1,13 +1,27 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+:root {
+  --white: #EEEEEE;
+  --blue: #548CA8;
+  --ash: #476072;
+  --black: #334257;
+}
+
 body{
   font-family: 'Zen Loop', cursive;
-  background-color: #323232;
-  color: white;
+  background-color: var(--black);
+  color: var(--white);
+  font-size: 20px;
 }
 
 .header{
-  background-color: #F0FFF0;
-  border:2px solid black;
-  color:red;
+  background-color: var(--white);
+  border:2px solid var(--ash);
+  color:var(--blue);
   display: flex;
   justify-content: space-around;
 }
@@ -21,9 +35,9 @@ body{
 }
 
 .login{
-  background-color: #4CAF50;
+  background-color: var(--blue);
   border: none;
-  color: white;
+  color: var(--white);
   padding: 10px;
   border-radius: 4px;
   margin: 10px;
@@ -31,9 +45,9 @@ body{
 }
 
 .login:hover{
-  background-color: #854D3E;
+  background-color: var(--ash);
   border: none;
-  color: white;
+  color: var(--white);
   padding: 10px;
   border-radius: 4px;
   margin: 10px;
@@ -42,13 +56,13 @@ body{
 
 h2{
   text-align:center;
-  color:white;
+  color: var(--white);
 }
 
 .start{
   text-align:center;
-  border:2px solid green;
-  color:white;
+  border:2px solid var(--ash);
+  color:var(--white);
   justify-content: space-around;
 }
 
@@ -56,12 +70,8 @@ input[type=text] {
   padding: 2px 2px;
   border: none;
   border-radius: 4px;
-  background-color: #f1f1f1;
+  background-color: var(--white);
   margin: 5px;
-}
-
-.hide{
-  display:none;
 }
 
 select{
@@ -69,7 +79,7 @@ select{
   padding: 2px 2px;
   border: none;
   border-radius: 4px;
-  background-color: #f1f1f1;
+  background-color: var(--white);
 }
 
 ul {
@@ -85,9 +95,9 @@ li:nth-last-of-type(n+20) {
 }
 
 .btn{
-  background-color: #4CAF50;
+  background-color: var(--blue);
   border: none;
-  color: white;
+  color: var(--white);
   padding: 10px 20px;
   border-radius: 4px;
   text-decoration: none;
@@ -96,9 +106,9 @@ li:nth-last-of-type(n+20) {
 }
 
 .btn:hover{
-  background-color: #854D3E;
+  background-color: var(--ash);
   border: none;
-  color: white;
+  color: var(--white);
   padding: 10px 20px;
   border-radius: 4px;
   text-decoration: none;
@@ -109,7 +119,7 @@ li:nth-last-of-type(n+20) {
 .img{
   width: 50;
   height: 70;
-  border: 1px solid white;
+  border: 1px solid var(--white);
   margin-left: 2px;
   margin-right: 2px;
 }
@@ -117,7 +127,7 @@ li:nth-last-of-type(n+20) {
 .active{
   width: 50px;
   height: 70px;
-  border: 1px solid white;
+  border: 1px solid var(--white);
   margin-left: 2px;
   margin-right: 2px;
 }
@@ -125,45 +135,45 @@ li:nth-last-of-type(n+20) {
 .active:hover{
   width: 55px;
   height: 70px;
-  border: 1px solid white;
+  border: 1px solid var(--white);
 }
 
 .button {
-  background-color: black;
-  border: 0px solid black;
+  background-color: var(--black);
+  border: none;
 }
 
 .bot{
   text-align: center;
-  border: 1px solid white;
+  border: 1px solid var(--white);
   padding-bottom: 10px;
 }
 
 .player1 {
   grid-area: player1;
   text-align: center;
-  border: 1px solid white;
+  border: 1px solid var(--white);
   padding-bottom: 10px;
   border-radius:40px;
 }
 .player2 {
   grid-area: player2;
   text-align: center;
-  border: 1px solid white;
+  border: 1px solid var(--white);
   padding-bottom: 10px;
   border-radius:40px;
 }
 .player3 {
   grid-area: player3;
   text-align: center;
-  border: 1px solid white;
+  border: 1px solid var(--white);
   padding-bottom: 10px;
   border-radius:40px;
 }
 .player4 {
   grid-area: player4;
   text-align: center;
-  border: 1px solid white;
+  border: 1px solid var(--white);
   padding-bottom: 10px;
   border-radius:40px;
 }
@@ -171,7 +181,7 @@ li:nth-last-of-type(n+20) {
 .mid{
   grid-area: mid;
   text-align: center;
-  border: 1px solid red;
+  border: 1px solid var(--ash);
   margin: 20px;
   border-radius: 40px;
   padding-bottom: 10px;
@@ -195,8 +205,8 @@ li:nth-last-of-type(n+20) {
   float: right;
   height: 400px;
   width: 300px;
-  background-color: white;
-  color: black;
+  background-color: var(--white);
+  color: var(--black);
   padding: 10px;
   border-radius: 10px;
 }
@@ -205,19 +215,15 @@ li:nth-last-of-type(n+20) {
   width: 75%;
   height: 40px;
   padding-left: 10px;
-  border: 1px solid green;
+  border: 1px solid var(--blue);
 }
 
 #sendMessage{
   height: 40px;
   padding: 10px;
   border: none;
-  background-color: green;
+  background-color: var(--blue);
   border-radius: 5px;
   color: white;
   cursor: pointer;
-}
-
-.ok{
-  
 }
