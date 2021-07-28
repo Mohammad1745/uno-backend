@@ -31,7 +31,7 @@
 
     $last = array("7R","","","");
 
-    $rest_card = array_slice($cards, 20, 68);
+    $rest_card = array_slice($cards, 40, 68);
 
     sort($bot2);
     sort($bot3);
@@ -51,7 +51,7 @@
     </div>
     <br>
 
-    <div class="intro ide">
+    <div class="intro hide">
       <div>
         <img class="intro-img" src="img/uno.png" alt="">
       </div>
@@ -65,7 +65,7 @@
     </div>
 
 
-     <div class="start ide" id="start">
+     <div class="start hide" id="start">
        <div class="create-game">
          <form>
            <label for="userId">Nickname:</label>
@@ -104,7 +104,7 @@
      </div>
 
 
-     <div class="container hide">
+     <div class="container ide">
        <div class="player1">
          <h2>You</h2>
          <?php
@@ -160,7 +160,7 @@
      </div>
 
 
-    <div class="hide">
+    <div class="ide">
       <div class="messages" id="messages">
         <ul id="msgs"></ul>
 
@@ -175,7 +175,7 @@
     </div>
 
 
-<div class="footer">
+<div class="footer hide">
   Some text, maybe later.
 </div>
 
