@@ -24,7 +24,7 @@
 
     shuffle($cards);
 
-    $my_cards = array_slice($cards, 0, 10);
+    $my_cards = array_slice($cards, 0, 17);
     $bot2 = array_slice($cards, 10, 10);
     $bot3 = array_slice($cards, 20, 10);
     $bot4 = array_slice($cards, 30, 10);
@@ -111,10 +111,10 @@
             for ($x = 0; $x < count($my_cards); $x++) {
               if (($last[0][0] == $my_cards[$x][0]) or ($last[0][1] == $my_cards[$x][1]) or ($my_cards[$x][1] == "C")) {
               ?>
-              <a href="#"><img src="img/<?php echo $my_cards[$x]; ?>.png" class="img img-stack" style="transform: rotate(<?php echo ($x-((count($my_cards)-1)/2))*20; ?>deg);"></a>
+              <a href="#"><img src="img/<?php echo $my_cards[$x]; ?>.png" class="img img-stack" style="transform: rotate(<?php echo ($x-((count($my_cards)-1)/2))*15; ?>deg);"></a>
         <?php    }
         else { ?>
-          <img class="img-stack img" src="img/<?php echo $my_cards[$x]; ?>.png" style="transform: rotate(<?php echo ($x-((count($my_cards)-1)/2))*20; ?>deg);">
+          <img class="img-stack img" src="img/<?php echo $my_cards[$x]; ?>.png" style="transform: rotate(<?php echo ($x-((count($my_cards)-1)/2))*15; ?>deg);">
           <?php
         } }
           ?>
