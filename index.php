@@ -41,22 +41,31 @@
      ?>
     <div class="header">
       <h1 class="head">UNO-LIMITED</h1>
-      <div class="lgin" id="lgin">
-        <button id="login" class="login">Login with Google</button>
-      </div>
-      <div id="lgout">
-        <strong id="userDetails" style="color:black;"></strong>
-        <button id="logout" class="login">Logout</button>
+      <div id="user">
+        <div id="username">Hola Sami!</div>
+        <div class="">
+          <button class="ENBN actv">EN</button>
+          <button class="ENBN">BN</button>
+        </div>
       </div>
     </div>
     <br>
+
+    <div class="intro">
+      <div>
+        <img class="intro-img" src="img/uno.png" alt="">
+      </div>
+      <div class="intro-text">
+        <p>UNO-LIMITED is a free web application to play UNO.</p>
+      </div>
+    </div>
 
 
      <div class="start" id="start">
        <div class="">
          <form>
            <label for="serverId">Game ID:</label>
-           <input type="text" name="serverId" id="serverId" value="abc12"><br>
+           <input type="text" name="serverId" id="serverId" placeholder="abc12"><br>
            <label for="numPlayer">Number of players:</label>
            <select name="numPlayer" id="numPlayer">
                <option value="2">2</option>
@@ -144,15 +153,15 @@
 
 
 
-<div class="messages">
-  <form>
-    <input type="text" id="message" placeholder="Enter message" autocomplete="off">
-    <button type="button" id="sendMessage">Send</button>
-  </form>
+    <div class="messages">
+      <form>
+        <input type="text" id="message" placeholder="Enter message" autocomplete="off">
+        <button type="button" id="sendMessage" class"sendMessage">Send</button>
+      </form>
 
-<ul id="msgs"></ul>
+    <ul id="msgs"></ul>
 
-</div>
+    </div>
 
 
 

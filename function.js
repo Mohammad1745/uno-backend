@@ -12,6 +12,24 @@ const message = document.getElementById("message");
 
 const database = firebase.database();
 
+// Get the container element
+var btnContainer = document.getElementById("user");
+
+// Get all buttons with class="btn" inside the container
+var btns = btnContainer.getElementsByClassName("ENBN");
+
+// Loop through the buttons and add the active class to the current/clicked button
+for (var i = 0; i < btns.length; i++) {
+  btns[i].addEventListener("click", function() {
+    var current = document.getElementsByClassName("actv");
+    current[0].className = current[0].className.replace(" actv", "");
+    this.className += " actv";
+  });
+}
+
+
+
+
 startBtn.addEventListener("click", (e) =>{
   e.preventDefault();
   database.ref('/'+serverId.value+"/main").set({
@@ -55,54 +73,3 @@ database.ref('/chats').on('child_added', function (snapshot){
 
   document.getElementById("msgs").innerHTML += html;
 });
-
-
-
-
-
-document.getElementById('lgout').style.display="none"
-document.getElementById('start').style.display="none"
-document.getElementById('login').addEventListener('click', GoogleLogin)
-document.getElementById('logout').addEventListener('click', LogoutUser)
-
-let provider = new firebase.auth.GoogleAuthProvider()
-function GoogleLogin(){
-  console.log('Login Btn Call')
-  firebase.auth().signInWithPopup(provider).then(res=>{
-    console.log(res.user)
-    showUserDetails(res.user)
-  }).catch(e=>{
-    console.log(e)
-  })
-}
-
-function showUserDetails(user){
-  document.getElementById('userDetails').innerHTML = `
-   <p>${user.displayName}</p>
-  `
-}
-
-function checkAuthState(){
-  firebase.auth().onAuthStateChanged(user=>{
-    if(user){
-      document.getElementById('lgin').style.display="none"
-      document.getElementById('lgout').style.display="flex"
-      document.getElementById('start').style.display="flex"
-      showUserDetails(user)
-    }else{
-
-    };
-  });
-};
-
-function LogoutUser(){
-  console.log('Logout Btn Call')
-  firebase.auth().signOut().then(()=>{
-    document.getElementById('lgin').style.display="inherit"
-    document.getElementById('lgout').style.display="none"
-    document.getElementById('start').style.display="none"
-  })
-}
-
-
-checkAuthState();
