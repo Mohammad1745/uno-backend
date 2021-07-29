@@ -19,6 +19,7 @@ class GameService extends ResponseService {
      */
     joinGame = async request => {
         try {
+            const username = request.body.username
             const gameId = request.body.gameId
             let database = this.readData('data.json')
 
@@ -33,9 +34,9 @@ class GameService extends ResponseService {
             } else if (playerCount>=MAX_PLAYER_COUNT) {
                 return this.response().error("Player Full")
             } else {
-                database.game[gameId].players['player'+(playerCount+1)] =  request.body.username
+                database.game[gameId].players['player'+(playerCount+1)] =  username
                 this.writeData('data.json', database)
-                return this.response({gameId}).success('Joined Game Successfully')
+                return this.response({username, gameId}).success('Joined Game Successfully')
             }
         } catch (e) {
             return this.response().error(e.message)
@@ -48,6 +49,7 @@ class GameService extends ResponseService {
      */
     createGame = async request => {
         try {
+            const username = request.body.username
             let database = this.readData('data.json')
             let gameId = String(Object.keys(database.game).length+111111)
             database.game[gameId] = {
@@ -60,7 +62,7 @@ class GameService extends ResponseService {
             }
             this.writeData('data.json', database)
 
-            return this.response({gameId}).success('Game Created Successfully')
+            return this.response({username, gameId}).success('Game Created Successfully')
         } catch (e) {
             return this.response().error(e.message)
         }

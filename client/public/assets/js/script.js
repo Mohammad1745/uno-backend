@@ -37,7 +37,11 @@ function joinGameButtonHandler() {
         const gameId = document.getElementById('game_id').value
 
         if (joinGameOption===joinGameOptions.joinGame)
-            joinGame({username, gameId})
+            if(localStorage.getItem('gameId')){
+                helper.alertMessage("error", "Already has a game")
+            } else {
+                joinGame({username, gameId})
+            }
         else
             createGame({username})
     })
@@ -72,7 +76,9 @@ function createGame ({username}) {
 }
 
 function handleJoinGameRequestSuccess(response) {
-    console.log(response.data.gameId)
+    console.log(response.data)
+    localStorage.setItem('gameId', response.data.gameId)
+    localStorage.setItem('username', response.data.username)
     helper.alertMessage("success", response.message)
 }
 
