@@ -76,13 +76,33 @@ function createGame ({username}) {
 }
 
 function handleJoinGameRequestSuccess(response) {
-    console.log(response.data)
+    let {gameId, username} = response.data
     localStorage.setItem('gameId', response.data.gameId)
     localStorage.setItem('username', response.data.username)
     helper.alertMessage("success", response.message)
+    startGamePopUp({gameId, username})
 }
 
 function handleJoinGameRequestError(response) {
     helper.alertMessage("error", response.message)
     console.log(response.message)
+}
+
+function startGamePopUp({gameId, username}) {
+    const startGamePopUp = document.getElementById('game_login')
+    startGamePopUp.innerHTML = ''
+
+    startGamePopUp.insertAdjacentHTML('beforeend', `
+        <div id="popup_game_id"> Game Id: ${gameId}</div>
+        <hr>
+        <ul id="player_list">
+            <li>${username}</li>
+            <li>p2</li>
+            <li>p3</li>
+            <li>p4</li>
+        </ul>
+        <button type="button" id="start_game_button" class="start-game-button">Start Game</button>
+    `)
+    startGamePopUp.style.padding = "10px"
+    document.getElementById('popup_game_id').style.color = 'black'
 }
