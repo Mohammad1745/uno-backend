@@ -77,7 +77,7 @@ class GameService extends ResponseService {
 
     writeData = (filename, database) => {
         database = JSON.stringify(database)
-        fs.writeFileSync(path.join(__dirname, 'data.json'), database, 'utf8', err => {
+        fs.writeFileSync(path.join(__dirname, filename), database, 'utf8', err => {
             if (err) throw err
         })
     }
