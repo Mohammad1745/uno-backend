@@ -10,9 +10,10 @@ module.exports = (app, express) => {
 
     //api routes
     // app.use('/api/admin', require('../../routes/api/admin'))
-    app.use('/api/user/chat', require('../modules/chat/api'))
-    app.use('/api/user/profile', require('../modules/profile/api'))
-    app.use('/api/user/dashboard', require('../modules/dashboard/api'))
-    app.use('/api/auth', require('../modules/authentication/api'))
+    app.use('/api/game', require('../modules/game/api'))
+    // app.use('/api/user/chat', require('../modules/chat/api'))
+    // app.use('/api/user/profile', require('../modules/profile/api'))
+    // app.use('/api/user/dashboard', require('../modules/dashboard/api'))
+    // app.use('/api/auth', require('../modules/authentication/api'))
     // app.use('/api', require('../modules/authentication/api'))
 }

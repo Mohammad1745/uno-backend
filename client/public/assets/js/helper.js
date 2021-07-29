@@ -16,7 +16,7 @@ let helper = {
         return time
     },
 
-    alertMessage : (message, type="success") => {
+    alertMessage : (type="success", message) => {
         let content = `<div style="position: fixed; left: 0; top: 0; width: 100%; z-index: 100">`
         if(type==="success") {
             content += `
