@@ -4,12 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Messenger</title>
+    <title>UNO</title>
     <link rel="icon" href ="../public/assets/images/icons/messenger.png" type = "image/x-icon">
 
     <!-- styles -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    <link rel="stylesheet" href="../public/assets/css/master.css">
+    <link rel="stylesheet" href="./public/assets/css/style.css">
 </head>
 <body>
 
@@ -19,30 +19,42 @@
     </div>
 </div>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        setTimeout(checkAuthorization, 2000, dashboard, login)
+<div class="header">
+    <h1 class="head">UNO-LIMITED</h1>
+    <div id="user">
+        <div id="user_name"></div>
+        <div class="">
+            <button class="ENBN actv">EN</button>
+            <button class="ENBN">BN</button>
+        </div>
+    </div>
+</div>
 
-        function checkAuthorization(dashboard, login) {
-            $.ajax({
-                url: "http://127.0.0.1:8000/api/user/dashboard",
-                type: "GET",
-                headers: { authorization: localStorage.getItem("tokenType") + " " + localStorage.getItem("token")},
-            }).done(response => {
-                // console.log(response)
-                if (response.success) dashboard()
-                else login()
-            }).fail(login)
-        }
-        function dashboard() {
-            window.location.replace("./views/user/dashboard.html")
-        }
-        function login(err) {
-            // console.log(err)
-            window.location.replace("./views/authentication/login.html")
-        }
-    })
+
+<div class="game-login">
+    <div class="create-option" id="create_option">
+        <div class="inactive">
+            Create Game
+        </div>
+        <button class="join-button" id="join_menu_button" >Join Game</button>
+    </div>
+    <div class="join-option" id="join_option">
+        <button class="join-button" id="create_menu_button">Create Game</button>
+        <div class="inactive">
+            Join Game
+        </div>
+    </div>
+    <div class="join-game-form" id="join_game_form">
+        <input type="text" class="game-input" id="username" maxlength="10" placeholder="Enter your nickname" autocomplete="off">
+        <input type="text" class="game-input" id="server_id" maxlength="6" placeholder="Enter a game id" autocomplete="off">
+        <button type="button" id="join_button" class="join-button">Create Game</button>
+    </div>
+</div>
+
+<script type="text/javascript">
 </script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="./public/assets/js/script.js"></script>
 </body>
 </html>

@@ -1,0 +1,388 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+:root {
+  --primary: #5F939A;
+  --secondary: #F2EDD7;
+  --third: #3A6351;
+  --fourth: #A0937D;
+
+}
+
+body{
+  font-family: 'Zen Loop', cursive;
+  background-color: var(--primary);
+  color: var(--secondary);
+  font-size: 20px;
+  font-weight: bold;
+}
+
+/* HEADER CLASSES */
+
+.header{
+  background-color: var(--secondary);
+  border:2px solid var(--fourth);
+  color:var(--third);
+  display: flex;
+  justify-content: space-around;
+}
+
+.uno-brand{
+  width: 100px;
+  margin: 10px;
+}
+
+#user{
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+#username{
+  color: black;
+  font-weight: bold;
+  padding: 10px;
+}
+
+.head{
+  margin: 10px;
+  color: red;
+}
+.ENBN {
+  border: none;
+  padding: 10px;
+  background-color: var(--secondary);
+  cursor: pointer;
+}
+
+/* Style the active class (and buttons on mouse-over) */
+.actv, .ENBN:hover {
+  background-color: var(--third);
+  color: var(--secondary);
+}
+
+/* GAME LOGIN */
+
+.game-login{
+  background:white;
+  max-width:400px;
+  margin: 100px auto;
+  box-shadow:0 4px 10px 4px rgba(0, 0, 0, 0.3);
+  border-radius: 5px;
+}
+
+.create-option{
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.join-option{
+  display: none;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.inactive{
+  width: 100%;
+  text-align: center;
+  color: var(--third);
+  padding: 10px;
+  margin: 5px;
+}
+
+.join-button{
+  border: none;
+  border-radius: 5px;
+  background-color: var(--third);
+  color: var(--secondary);
+  width: 95%;
+  margin: 10px;
+  padding: 10px;
+}
+.join-button:hover{
+  background-color: var(--primary);
+}
+
+.create-game{
+  overflow: auto;
+  text-align: center;
+}
+
+.create-game>button{
+  width:95%;
+}
+
+.join-game{
+  display: none;
+  overflow: auto;
+  text-align: center;
+}
+
+.join-game>button{
+  width:95%;
+}
+
+.game-input{
+  padding: 2px 10px;
+  margin: 10px;
+  outline: none;
+  height: 50px;
+  width: 95%;
+  border: none;
+  border-bottom: 2px solid green;
+}
+.game-input:hover, .game-input:focus{
+  margin: 10px;
+  height: 50px;
+  width: 95%;
+  border: none;
+  border-bottom: 2px solid black;
+}
+
+
+
+
+
+
+
+
+
+.intro{
+  display: flex;
+  justify-content: space-evenly;
+  padding: 20px;
+}
+.intro-img{
+  border: 1px solid var(--secondary);
+}
+.intro-text{
+  text-align: justify;
+}
+
+h2{
+  text-align:center;
+  color: var(--secondary);
+}
+
+.start{
+  text-align:center;
+  padding-top: 20px;
+  border:2px solid var(--fourth);
+  color:var(--secondary);
+  display: flex;
+  justify-content: space-around;
+  align-items:center;
+}
+
+
+
+select{
+  width: 20%;
+  padding: 2px 2px;
+  height: 30px;
+  border: 1px solid var(--secondary);
+  border-radius: 4px;
+  background-color: var(--secondary);
+}
+
+.btn{
+  background-color: var(--third);
+  border: none;
+  color: var(--secondary);
+  padding: 10px 20px;
+  border-radius: 4px;
+  text-decoration: none;
+  margin: 4px 2px;
+  cursor: pointer;
+}
+
+.btn:hover{
+  background-color: var(--fourth);
+  border: none;
+  color: var(--secondary);
+  padding: 10px 20px;
+  border-radius: 4px;
+  text-decoration: none;
+  margin: 4px 2px;
+  cursor: pointer;
+}
+
+.img{
+  width: 70px;
+  height: 100px;
+  border: 1px solid var(--secondary);
+  margin-left: 2px;
+  margin-right: 2px;
+}
+
+.button {
+  background-color: var(--primary);
+  border: none;
+}
+
+.bot{
+  text-align: center;
+  border: 1px solid var(--secondary);
+  padding-bottom: 10px;
+}
+
+.img-stack{
+  position: absolute;
+  border: 1px solid #b9ab8e;
+  transform-origin: center 200%;
+  transition: transform .5s ease-out;
+}
+.img-stack:hover {
+  z-index: 1;
+}
+
+.img-stack-others{
+  position: absolute;
+  border: 1px solid #b9ab8e;
+  transform-origin: center 100%;
+  transition: transform .5s ease-out;
+}
+
+
+.player1 {
+  grid-area: player1;
+  text-align: center;
+  border: 1px solid var(--secondary);
+  padding-bottom: 250px;
+  border-radius:40px;
+}
+.player2 {
+  grid-area: player2;
+  text-align: center;
+  border: 1px solid var(--secondary);
+  padding-bottom: 150px;
+  border-radius:40px;
+}
+.player3 {
+  grid-area: player3;
+  text-align: center;
+  border: 1px solid var(--secondary);
+  padding-bottom: 150px;
+  border-radius:40px;
+}
+.player4 {
+  grid-area: player4;
+  text-align: center;
+  border: 1px solid var(--secondary);
+  padding-bottom: 150px;
+  border-radius:40px;
+}
+
+.mid{
+  grid-area: mid;
+  text-align: center;
+  border: 1px solid var(--fourth);
+  margin: 20px;
+  border-radius: 40px;
+  padding-bottom: 10px;
+  padding-top: 10px;
+}
+
+.container {
+  display: grid;
+  grid-template-columns: auto;
+  grid-template-rows: auto;
+  grid-template-areas:
+    ". . player3 player3 . ."
+    ". . player3 player3 . ."
+    "player2 player2 mid mid player4 player4"
+    "player2 player2 mid mid player4 player4"
+    ". . player1 player1 . ."
+    ". . player1 player1 . .";
+}
+
+.messages {
+  display: none;
+  position: fixed;
+  background-color: var(--secondary);
+  color: var(--primary);
+  padding: 10px;
+  border-radius: 10px;
+  bottom: 20px;
+  right: 15px;
+  z-index: 9;
+  width: 320px;
+}
+
+ul {
+  list-style-type: none;
+  -webkit-padding-start: 0;
+}
+li {
+  flex: 0 0 auto;
+  font-family: monospace;
+  background-color: var(--primary);
+  color: var(--secondary);
+  margin: 3px;
+  padding: 5px;
+  border: none;
+  border-radius: 10px;
+}
+li:nth-last-of-type(n+15) {
+  display: none;
+}
+
+#message{
+  width: 75%;
+  background-color: white;
+  height: 40px;
+  padding: 10px;
+  border: 1px solid var(--third);
+  resize: none;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+#sendMessage{
+  height: 40px;
+  padding: 10px;
+  border: none;
+  background-color: var(--third);
+  border-radius: 5px;
+  color: white;
+  cursor: pointer;
+}
+
+#sendMessage:hover{
+  background-color: var(--fourth);
+}
+
+.open-button {
+  background-color: var(--secondary);
+  border: none;
+  font-weight: bold;
+  color: var(--primary);
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  position: fixed;
+  bottom: 23px;
+  right: 28px;
+  width: 280px;
+}
+.open-button:hover{
+  background-color: var(--third);
+  color: var(--secondary);
+}
+
+.close{
+  background-color: red;
+  border: none;
+  color: var(--secondary);
+  padding: 10px 20px;
+  border-radius: 5px;
+  text-decoration: none;
+  cursor: pointer;
+  width: 300px;
+}
+.close:hover{
+  background-color: var(--third);
+}
