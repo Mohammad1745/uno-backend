@@ -6,79 +6,14 @@ const multer = require('multer')
 const util = require('util')
 
 module.exports = {
-    roles : input => {
-        let output = {
-            ADMIN_ROLE: 'Admin',
-            USER_ROLE: 'User'
-            //...
-        }
-        return input ? output[input] : output;
-    },
-    userRoles : input => {
-        let output = {
-            USER_ROLE: 'User'
-            //...
-        }
-        return input ? output[input] : output;
-    },
-
-    avatarPath: () => 'public/uploads/avatar/',
-    avatarViewPath: () => '/uploads/avatar/',
-
-    uploadFile: async (directory, fieldName, filter, request, response) => {
-        let result = {}
-        let upload = multer({
-            storage: multer.diskStorage({
-                destination: (req, file, cb) => cb(null, directory),
-                // By default, multer removes file extensions so let's add them back
-                filename: (req, file, cb) => cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname))
-            }),
-            fileFilter: filter,
-        }).single(fieldName)
-        upload = util.promisify(upload)
-        try {
-            console.log(request.file)
-            await upload(request, response)
-            result.fileName = request.file.filename
-        } catch (err) {
-            if (request.fileValidationError)  result.err = request.fileValidationError
-            else if (!request.file)  result.err = 'Please select an image to upload'
-            else if (err instanceof multer.MulterError)  result.err = err
-            else if (err)  result.err = err
-        }
-        return result
-    },
-    deleteFile: (directory, filename) => {
-        fs.unlinkSync(directory+filename)
-    },
-
-    imageFilter : (req, file, cb) => {
-        // Accept images only
-        if (!path.extname(file.originalname).match(/\.(jpg|JPG|jpeg|JPEG|png|PNG|gif|GIF)$/)) {
-            req.fileValidationError = 'Only image files are allowed!';
-            return cb(new Error('Only image files are allowed!'), false);
-        }
-        cb(null, true);
-    },
-    docFilter : (req, file, cb) => {
-        // Accept images only
-        if (!path.extname(file.originalname).match(/\.(pdf|PDF|doc|DOC|docx|DOCX)$/)) {
-            req.fileValidationError = 'Only image files are allowed!';
-            return cb(new Error('Only image files are allowed!'), false);
-        }
-        cb(null, true);
-    },
-
-    sendMessage: (toNumber, message, successCallback, errorCallback) => {
-        twilioClient.messages.create({
-            to: toNumber,
-            from: process.env.TWILIO_NUMBER,
-            body: message,
-        }).then(function() {
-            successCallback()
-        }).catch(function(err) {
-            errorCallback(err)
-        })
+    Cards: () => {
+        return [
+            "0R","1R","1R","2R","2R","3R","3R","4R","4R","5R","5R","6R","6R","7R","7R","8R","8R","9R","9R","sR","sR","rR","rR","dR","dR",
+            "0Y","1Y","1Y","2Y","2Y","3Y","3Y","4Y","4Y","5Y","5Y","6Y","6Y","7Y","7Y","8Y","8Y","9Y","9Y","sY","sY","rY","rY","dY","dY",
+            "0G","1G","1G","2G","2G","3G","3G","4G","4G","5G","5G","6G","6G","7G","7G","8G","8G","9G","9G","sG","sG","rG","rG","dG","dG",
+            "0B","1B","1B","2B","2B","3B","3B","4B","4B","5B","5B","6B","6B","7B","7B","8B","8B","9B","9B","sB","sB","rB","rB","dB","dB",
+            "cC","cC","cC","cC","fC","fC","fC","fC"
+        ]
     },
 
     randomNumber : (length = 10) => {
@@ -88,17 +23,5 @@ module.exports = {
             response += String(y).substr(String(y).length-1, 1)
         }
         return response;
-    },
-
-    makeHash : (secret,data) =>  crypto.createHash('sha256').update(secret+data).digest('base64'),
-
-    wordSplitter: string => {
-        string.split('').map(char => {
-            if (char >= 'A' && char <= 'Z') {
-                let worldPieces = string.split(char)
-                string = worldPieces[0] + " " + char + worldPieces[1]
-            }
-        })
-        return string.charAt(0).toUpperCase() + string.slice(1)
     }
 }

@@ -6,10 +6,10 @@ let joinGameOption = joinGameOptions.createGame
 let socket
 
 document.addEventListener("DOMContentLoaded", async () => {
+    handleSocketConnection()
     joinGameMenuHandler()
     joinGameButtonHandler()
     if(localStorage.getItem('gameId')) await startGamePopUp()
-    handleSocketConnection()
 })
 
 function handleSocketConnection() {
@@ -19,6 +19,9 @@ function handleSocketConnection() {
     })
     socket.on('player-joining', async payload => {
         await startGamePopUp()
+    })
+    socket.on('start-game', payload => {
+        game()
     })
 }
 
@@ -81,7 +84,6 @@ function createGame ({username}) {
         method: "POST",
         data: {username}
     }).done(async response => {
-        console.log(response)
         response.success ?
             await handleCreateGameRequestSuccess(response) :
             handleJoinGameRequestError(response)
@@ -130,6 +132,7 @@ async function startGamePopUp() {
     document.getElementById('popup_game_id').style.color = 'black'
     await helper.sleep(500)
     showPlayerList(gameId)
+    handleStartGameButton()
 }
 
 function showPlayerList (gameId) {
@@ -148,15 +151,48 @@ function showPlayerList (gameId) {
 
 function handlePlayerListRequestSuccess(response) {
     let playerList = response.data
+    console.log(playerList)
     let playerListDom = document.getElementById('player_list')
     playerListDom.innerHTML = ''
     Object.keys(playerList).map(key => {
-        localStorage.setItem(key, playerList[key])
-        playerListDom.insertAdjacentHTML('beforeend', `<li class="game-player-list"><img class="players-avatar" src="./public/assets/images/icons/uno-logo.png"> ${playerList[key]}</li>`)
+        localStorage.setItem(key, playerList[key].username)
+        playerListDom.insertAdjacentHTML('beforeend', `<li class="game-player-list"><img class="players-avatar" src="./public/assets/images/icons/uno-logo.png"> ${playerList[key].username}</li>`)
     })
 }
 
 function handlePlayerListRequestError(response) {
+    helper.alertMessage("error", response.message)
+    console.log(response.message)
+}
+
+function handleStartGameButton() {
+    const startButton = document.getElementById('start_game_button')
+
+    startButton.addEventListener('click', async () => {
+        let gameId = localStorage.getItem('gameId')
+        socket.emit('start-game', 'game-started')
+        startGame(gameId)
+    })
+}
+
+
+function startGame(gameId) {
+    $.ajax({
+        url: helper.DOMAIN + "/api/game/start-game",
+        method: "GET",
+        data: {gameId}
+    }).done( response => {
+        response.success ?
+            handleStartGameRequestSuccess(response) :
+            handleStartGameRequestError(response)
+    }).fail(err => {
+        console.log(err)
+    })
+}
+ function handleStartGameRequestSuccess(response) {
+}
+
+function handleStartGameRequestError(response) {
     helper.alertMessage("error", response.message)
     console.log(response.message)
 }

@@ -34,6 +34,24 @@ class GameController {
     playerList = async (request, response) => {
         return response.json(await this.service.playerList(request))
     }
+
+    /**
+     * @param {Object} request
+     * @param {Object} response
+     * @return {JSON}
+     */
+    startGame = async (request, response) => {
+        return response.json(await this.service.startGame(request))
+    }
+
+    /**
+     * @param {Object} request
+     * @param {Object} response
+     * @return {JSON}
+     */
+    game = async (request, response) => {
+        return response.json(await this.service.game(request))
+    }
 }
 
 module.exports = new GameController()

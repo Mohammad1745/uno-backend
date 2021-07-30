@@ -1,7 +1,7 @@
 const fs = require('fs')
 const path = require('path')
 const ResponseService = require('../../base/response_service')
-const {randomNumber} = require('../../helper/helper')
+const {randomNumber, Cards} = require('../../helper/helper')
 const {MAX_PLAYER_COUNT} = require('../../helper/core_constants')
 
 class GameService extends ResponseService {
@@ -22,12 +22,67 @@ class GameService extends ResponseService {
             const gameId = request.query.gameId;
             let database = this.readData('data.json')
 
-            let game = database.game[gameId]
+            let game = database.games[gameId]
             if (!game) {
                 return this.response().error("Wrong Game Id")
             }
 
             return this.response(game.players).success('Joined Game Successfully')
+        } catch (e) {
+            return this.response().error(e.message)
+        }
+    }
+
+    /**
+     * @param {Object} request
+     * @return {Object}
+     */
+    startGame = async request => {
+        try {
+            const gameId = request.query.gameId;
+            let database = this.readData('data.json')
+
+            let game = database.games[gameId]
+            if (!game) {
+                return this.response().error("Wrong Game Id")
+            }
+
+            if (game.gameStarted) {
+                return this.response().error("Game Already Started")
+            } else {
+                let cards = Cards()
+                cards.sort(function() { return 0.5 - Math.random() });
+                let index = 0
+                console.log(Object.keys(game.players))
+                Object.keys(game.players).map(key => {
+                    database.games[gameId].players[key].cards = cards.filter((card, indx) => (indx >= index && indx <= index+9))
+                    console.log(index)
+                    index += 10
+                })
+                database.games[gameId].restCards =  cards.filter((card, indx) => (indx >= index))
+                database.games[gameId].gameStarted = true
+                this.writeData('data.json', database)
+                return this.response().success('Joined Game Successfully')
+            }
+        } catch (e) {
+            return this.response().error(e.message)
+        }
+    }
+
+    /**
+     * @param {Object} request
+     * @return {Object}
+     */
+    game = async request => {
+        try {
+            const gameId = request.query.gameId;
+            let database = this.readData('data.json')
+
+            let game = database.games[gameId]
+            if (!game) {
+                return this.response().error("Wrong Game Id")
+            }
+            return this.response(game).success('Joined Game Successfully')
         } catch (e) {
             return this.response().error(e.message)
         }
@@ -43,7 +98,7 @@ class GameService extends ResponseService {
             const gameId = request.body.gameId
             let database = this.readData('data.json')
 
-            let game = database.game[gameId]
+            let game = database.games[gameId]
             if (!game) {
                 return this.response().error("Wrong Game Id")
             }
@@ -54,7 +109,11 @@ class GameService extends ResponseService {
             } else if (playerCount>=MAX_PLAYER_COUNT) {
                 return this.response().error("Player Full")
             } else {
-                database.game[gameId].players['player'+(playerCount+1)] =  username
+                database.games[gameId].players['player'+(playerCount+1)] = {
+                    username,
+                    cards: [],
+                    uno: false
+                }
                 this.writeData('data.json', database)
                 return this.response({username, gameId}).success('Joined Game Successfully')
             }
@@ -71,11 +130,15 @@ class GameService extends ResponseService {
         try {
             const username = request.body.username
             let database = this.readData('data.json')
-            let gameId = String(Object.keys(database.game).length+111111)
-            database.game[gameId] = {
+            let gameId = String(Object.keys(database.games).length+111111)
+            database.games[gameId] = {
                 gameId,
                 players:{
-                    player1: request.body.username
+                    player1: {
+                        username: request.body.username,
+                        cards: [],
+                        uno: false
+                    }
                 },
                 gameStarted: false,
                 turn: "player2"

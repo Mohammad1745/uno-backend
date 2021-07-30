@@ -164,7 +164,7 @@ body{
 
 /* DASHBOARD */
 
-.container {
+.game-container {
   display: grid;
   grid-template-columns: auto;
   grid-template-rows: auto;
