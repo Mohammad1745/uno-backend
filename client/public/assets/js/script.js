@@ -93,13 +93,13 @@ function startGamePopUp({gameId, username}) {
     startGamePopUp.innerHTML = ''
 
     startGamePopUp.insertAdjacentHTML('beforeend', `
-        <div id="popup_game_id"> Game Id: ${gameId}</div>
+        <div id="popup_game_id" class="popup-game-id"> Game ID: ${gameId}</div>
         <hr>
-        <ul id="player_list">
-            <li>${username}</li>
-            <li>p2</li>
-            <li>p3</li>
-            <li>p4</li>
+        <ul id="player_list" class="players-list">
+            <li class="game-player-list"><img class="players-avatar" src="./public/assets/images/icons/uno-logo.png"> ${username}</li>
+            <li class="game-player-list"><img class="players-avatar" src="./public/assets/images/icons/uno-logo.png"> ${username}</li>
+            <li class="game-player-list"><img class="players-avatar" src="./public/assets/images/icons/uno-logo.png"> ${username}</li>
+            <li class="game-player-list"><img class="players-avatar" src="./public/assets/images/icons/uno-logo.png"> ${username}</li>
         </ul>
         <button type="button" id="start_game_button" class="start-game-button">Start Game</button>
     `)
