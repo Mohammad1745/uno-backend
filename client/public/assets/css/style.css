@@ -133,6 +133,35 @@ body{
   border-bottom: 2px solid black;
 }
 
+.popup-game-id{
+  text-align: center;
+  color: var(--third)
+}
+
+.players-list{
+  display: inline-block;
+  list-style:none;
+  color: var(--third);
+}
+
+.players-avatar{
+  float: left;
+  margin: 0 10px 0 -25px;
+  height: 50px;
+  width: 50px;
+  border-radius: 50%;
+}
+
+.game-player-list{
+  padding: 0 25px;
+  height: 50px;
+  font-size: 16px;
+  line-height: 50px;
+  border-radius: 25px;
+  background-color: rgba(0,0,0,0.2);
+  margin: 10px;
+}
+
 /* DASHBOARD */
 
 .container {
