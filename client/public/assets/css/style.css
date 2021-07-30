@@ -252,7 +252,6 @@ body{
 .input-message{
   width: 75%;
   background-color: white;
-  height: 40px;
   padding: 10px;
   border: 1px solid var(--third);
   resize: none;
@@ -260,8 +259,11 @@ body{
   overflow: hidden;
 }
 
+.input-message:focus{
+
+}
+
 .send-message{
-  height: 40px;
   padding: 10px;
   border: none;
   background-color: var(--third);
@@ -285,7 +287,7 @@ body{
   position: fixed;
   bottom: 23px;
   right: 28px;
-  width: 280px;
+  width: 300px;
 }
 .open-chat:hover{
   background-color: var(--third);
@@ -301,6 +303,7 @@ body{
   text-decoration: none;
   cursor: pointer;
   width: 300px;
+  margin-top: 10px;
 }
 .close-chat:hover{
   background-color: var(--third);
