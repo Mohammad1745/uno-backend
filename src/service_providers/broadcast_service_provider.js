@@ -12,6 +12,10 @@ module.exports = server => {
             io.emit('message', message)
         })
 
+        socket.on('player-joining', payload => {
+            io.emit('player-joining', payload)
+        })
+
         socket.on('disconnect', () => {
            console.log('disconnected')
         })

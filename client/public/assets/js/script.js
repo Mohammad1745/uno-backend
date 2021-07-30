@@ -3,12 +3,24 @@ let joinGameOptions = {
     joinGame: 2
 }
 let joinGameOption = joinGameOptions.createGame
+let socket
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
     joinGameMenuHandler()
     joinGameButtonHandler()
-    if(localStorage.getItem('gameId')) startGamePopUp()
+    if(localStorage.getItem('gameId')) await startGamePopUp()
+    handleSocketConnection()
 })
+
+function handleSocketConnection() {
+    socket = io("http://127.0.0.1:8000")
+    socket.on('connect', () => {
+        console.log('connected')
+    })
+    socket.on('player-joining', async payload => {
+        await startGamePopUp()
+    })
+}
 
 function joinGameMenuHandler() {
     const joinMenuButton = document.querySelector('#join_menu_button')
@@ -33,13 +45,13 @@ function joinGameMenuHandler() {
 function joinGameButtonHandler() {
     const joinButton = document.getElementById('join_button')
 
-    joinButton.addEventListener('click', () => {
+    joinButton.addEventListener('click', async () => {
         const username = document.getElementById('username').value
         const gameId = document.getElementById('game_id').value
 
         if(localStorage.getItem('gameId')){
             helper.alertMessage("error", "Already has a game")
-            startGamePopUp()
+            await startGamePopUp()
         } else {
             if (joinGameOption===joinGameOptions.joinGame)
                 joinGame({username, gameId})
@@ -71,7 +83,7 @@ function createGame ({username}) {
     }).done(async response => {
         console.log(response)
         response.success ?
-            await handleJoinGameRequestSuccess(response) :
+            await handleCreateGameRequestSuccess(response) :
             handleJoinGameRequestError(response)
     }).fail(err => {
         console.log(err)
@@ -79,6 +91,15 @@ function createGame ({username}) {
 }
 
 async function handleJoinGameRequestSuccess(response) {
+    let {gameId, username} = response.data
+    localStorage.setItem('gameId', gameId)
+    localStorage.setItem('username',  username)
+    helper.alertMessage("success", response.message)
+    await helper.sleep(500)
+    socket.emit('player-joining', 'player-joined')
+}
+
+async function handleCreateGameRequestSuccess(response) {
     let {gameId, username} = response.data
     localStorage.setItem('gameId', gameId)
     localStorage.setItem('username',  username)
@@ -107,7 +128,7 @@ async function startGamePopUp() {
     `)
     startGamePopUp.style.padding = "10px"
     document.getElementById('popup_game_id').style.color = 'black'
-    await helper.sleep(1000)
+    await helper.sleep(500)
     showPlayerList(gameId)
 }
 
