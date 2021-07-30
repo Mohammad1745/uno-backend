@@ -7,6 +7,7 @@ let joinGameOption = joinGameOptions.createGame
 document.addEventListener("DOMContentLoaded", () => {
     joinGameMenuHandler()
     joinGameButtonHandler()
+    if(localStorage.getItem('gameId')) startGamePopUp()
 })
 
 function joinGameMenuHandler() {
@@ -36,14 +37,15 @@ function joinGameButtonHandler() {
         const username = document.getElementById('username').value
         const gameId = document.getElementById('game_id').value
 
-        if (joinGameOption===joinGameOptions.joinGame)
-            if(localStorage.getItem('gameId')){
-                helper.alertMessage("error", "Already has a game")
-            } else {
+        if(localStorage.getItem('gameId')){
+            helper.alertMessage("error", "Already has a game")
+            startGamePopUp()
+        } else {
+            if (joinGameOption===joinGameOptions.joinGame)
                 joinGame({username, gameId})
-            }
-        else
-            createGame({username})
+            else
+                createGame({username})
+        }
     })
 }
 
@@ -52,9 +54,9 @@ function joinGame ({username, gameId}) {
         url: helper.DOMAIN + "/api/game/join",
         method: "POST",
         data: {username, gameId}
-    }).done(response => {
+    }).done(async response => {
         response.success ?
-            handleJoinGameRequestSuccess(response) :
+            await handleJoinGameRequestSuccess(response) :
             handleJoinGameRequestError(response)
     }).fail(err => {
         console.log(err)
@@ -66,21 +68,22 @@ function createGame ({username}) {
         url: helper.DOMAIN + "/api/game/create",
         method: "POST",
         data: {username}
-    }).done(response => {
+    }).done(async response => {
+        console.log(response)
         response.success ?
-            handleJoinGameRequestSuccess(response) :
+            await handleJoinGameRequestSuccess(response) :
             handleJoinGameRequestError(response)
     }).fail(err => {
         console.log(err)
     })
 }
 
-function handleJoinGameRequestSuccess(response) {
+async function handleJoinGameRequestSuccess(response) {
     let {gameId, username} = response.data
-    localStorage.setItem('gameId', response.data.gameId)
-    localStorage.setItem('username', response.data.username)
+    localStorage.setItem('gameId', gameId)
+    localStorage.setItem('username',  username)
     helper.alertMessage("success", response.message)
-    startGamePopUp({gameId, username})
+    await startGamePopUp()
 }
 
 function handleJoinGameRequestError(response) {
@@ -88,7 +91,9 @@ function handleJoinGameRequestError(response) {
     console.log(response.message)
 }
 
-function startGamePopUp({gameId, username}) {
+async function startGamePopUp() {
+    let gameId = localStorage.getItem('gameId')
+    let username = localStorage.getItem('username')
     const startGamePopUp = document.getElementById('game_login')
     startGamePopUp.innerHTML = ''
 
@@ -96,13 +101,41 @@ function startGamePopUp({gameId, username}) {
         <div id="popup_game_id" class="popup-game-id"> Game ID: ${gameId}</div>
         <hr>
         <ul id="player_list" class="players-list">
-            <li class="game-player-list"><img class="players-avatar" src="./public/assets/images/icons/uno-logo.png"> ${username}</li>
-            <li class="game-player-list"><img class="players-avatar" src="./public/assets/images/icons/uno-logo.png"> ${username}</li>
-            <li class="game-player-list"><img class="players-avatar" src="./public/assets/images/icons/uno-logo.png"> ${username}</li>
-            <li class="game-player-list"><img class="players-avatar" src="./public/assets/images/icons/uno-logo.png"> ${username}</li>
+        
         </ul>
         <button type="button" id="start_game_button" class="start-game-button">Start Game</button>
     `)
     startGamePopUp.style.padding = "10px"
     document.getElementById('popup_game_id').style.color = 'black'
+    await helper.sleep(1000)
+    showPlayerList(gameId)
+}
+
+function showPlayerList (gameId) {
+    $.ajax({
+        url: helper.DOMAIN + "/api/game/player-list",
+        method: "GET",
+        data: {gameId}
+    }).done(response => {
+        response.success ?
+            handlePlayerListRequestSuccess(response) :
+            handlePlayerListRequestError(response)
+    }).fail(err => {
+        console.log(err)
+    })
+}
+
+function handlePlayerListRequestSuccess(response) {
+    let playerList = response.data
+    let playerListDom = document.getElementById('player_list')
+    playerListDom.innerHTML = ''
+    Object.keys(playerList).map(key => {
+        localStorage.setItem(key, playerList[key])
+        playerListDom.insertAdjacentHTML('beforeend', `<li class="game-player-list"><img class="players-avatar" src="./public/assets/images/icons/uno-logo.png"> ${playerList[key]}</li>`)
+    })
+}
+
+function handlePlayerListRequestError(response) {
+    helper.alertMessage("error", response.message)
+    console.log(response.message)
 }

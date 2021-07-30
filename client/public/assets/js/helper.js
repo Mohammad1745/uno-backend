@@ -1,6 +1,10 @@
 let helper = {
     DOMAIN: "http://127.0.0.1:8000",
 
+    sleep : (milliseconds) => {
+        return new Promise(resolve => setTimeout(resolve, milliseconds))
+    },
+
     getTime: dateTime => {
         return (dateTime.getHours()<10 ? "0"+dateTime.getHours():dateTime.getHours())
         +":"+(dateTime.getMinutes()<10 ? "0"+dateTime.getMinutes():dateTime.getMinutes())

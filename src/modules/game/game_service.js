@@ -17,7 +17,27 @@ class GameService extends ResponseService {
      * @param {Object} request
      * @return {Object}
      */
-    joinGame = async request => {
+    playerList = async request => {
+        try {
+            const gameId = request.query.gameId;
+            let database = this.readData('data.json')
+
+            let game = database.game[gameId]
+            if (!game) {
+                return this.response().error("Wrong Game Id")
+            }
+
+            return this.response(game.players).success('Joined Game Successfully')
+        } catch (e) {
+            return this.response().error(e.message)
+        }
+    }
+
+    /**
+     * @param {Object} request
+     * @return {Object}
+     */
+    join = async request => {
         try {
             const username = request.body.username
             const gameId = request.body.gameId
@@ -47,7 +67,7 @@ class GameService extends ResponseService {
      * @param {Object} request
      * @return {Object}
      */
-    createGame = async request => {
+    create = async request => {
         try {
             const username = request.body.username
             let database = this.readData('data.json')
