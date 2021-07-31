@@ -333,19 +333,24 @@ body{
     box-shadow: -4px 0px 0 0 red, -4px -0 red,
       -8px 0 0 0 green, -8px 0 green
   }
-  50% {
+  33.33% {
     color: green;
     border: 2px solid green;
     box-shadow: -4px 0 0 0 black, -4px 0 black,
       -8px 0 0 0 red, -8px 0 red
   }
-  100% {
+  66.66% {
     color: red;
     border: 2px solid red;
     box-shadow: -4px 0 0 0 green, -4px 0 green,
       -8px 0 0 0 black, -8px -0 black
   }
-
+  100% {
+    color: green;
+    border: 2px solid green;
+    box-shadow: -4px 0 0 0 black, -4px 0 black,
+      -8px 0 0 0 red, -8px 0 red
+  }
 }
 
 

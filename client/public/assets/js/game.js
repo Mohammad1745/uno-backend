@@ -111,7 +111,7 @@ function handleCardPlay () {
     let turnUser = localStorage.getItem('turn')
     let userId = localStorage.getItem('userId')
     let turnUserHeader = document.querySelector("#"+turnUser+"_area").querySelector('#player_area_head')
-    turnUserHeader.style.backgroundColor = "white"
+    turnUserHeader.style.backgroundColor = "#F2EDD7"
     turnUserHeader.style.color = "black"
     let playableCards = document.querySelectorAll('.playable-card')
     for (let card of playableCards) {
