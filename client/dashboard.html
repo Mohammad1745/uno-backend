@@ -79,7 +79,7 @@
     </div>
   </div>
 
-  <div class="player4-area">
+  <div class="player4-area ide">
     <div class="player-area-head">
       Player 4
     </div>
@@ -93,7 +93,11 @@
   </div>
 
   <div class="mid">
-     <img class="card" src="./public/assets/images/cards/uno.png">
+     <img class="card" src="./public/assets/images/cards/${game.lastCards[0]}.png">
+     <img style="margin-left: -40px;" class="card" src="./public/assets/images/cards/uno.png">
+     <img style="margin-left: -40px;" class="card" src="./public/assets/images/cards/uno.png">
+     <button name="draw_card" class="draw-card must">Draw No. Cards</button>
+     <button name="uno_call" class="uno-call">UNO</button>
   </div>
 
 </div>

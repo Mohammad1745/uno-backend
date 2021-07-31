@@ -64,7 +64,13 @@ function updateGameContainers(game) {
         })
         html += ` </div></div>`
     })
-    html += `<div class="mid"><img class="card" src="./public/assets/images/cards/${game.lastCards[0]}.png"></div>`
+    html += `<div class="mid">
+          <img class="card" src="./public/assets/images/cards/${game.lastCards[2]}.png">
+          <img class="card" src="./public/assets/images/cards/${game.lastCards[1]}.png"  style="margin-left: -40px;">
+          <img class="card" src="./public/assets/images/cards/${game.lastCards[0]}.png"  style="margin-left: -40px;">
+          <button name="draw_card" class="draw-card must">Draw No. Cards</button>
+          <button name="uno_call" class="uno-call">UNO</button>
+        </div>`
 
     gameContainer.insertAdjacentHTML('beforeend', html)
     updateGameContainerGrid(game.players, userId)
