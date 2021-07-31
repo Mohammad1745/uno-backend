@@ -10,6 +10,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     joinGameMenuHandler()
     joinGameButtonHandler()
     if(localStorage.getItem('gameId')) await startGamePopUp()
+    if(localStorage.getItem('gameStarted')) game()
 })
 
 function handleSocketConnection() {
@@ -93,8 +94,9 @@ function createGame ({username}) {
 }
 
 async function handleJoinGameRequestSuccess(response) {
-    let {gameId, username} = response.data
+    let {gameId, username, userId} = response.data
     localStorage.setItem('gameId', gameId)
+    localStorage.setItem('userId', userId)
     localStorage.setItem('username',  username)
     helper.alertMessage("success", response.message)
     await helper.sleep(500)
@@ -102,8 +104,9 @@ async function handleJoinGameRequestSuccess(response) {
 }
 
 async function handleCreateGameRequestSuccess(response) {
-    let {gameId, username} = response.data
+    let {gameId, username, userId} = response.data
     localStorage.setItem('gameId', gameId)
+    localStorage.setItem('userId', userId)
     localStorage.setItem('username',  username)
     helper.alertMessage("success", response.message)
     await startGamePopUp()
