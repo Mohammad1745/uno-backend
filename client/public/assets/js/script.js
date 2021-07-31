@@ -173,6 +173,7 @@ function handleStartGameButton() {
 
     startButton.addEventListener('click', async () => {
         let gameId = localStorage.getItem('gameId')
+        socket.emit('start-game', 'game-started')
         startGame(gameId)
     })
 }
@@ -192,8 +193,7 @@ function startGame(gameId) {
     })
 }
  function handleStartGameRequestSuccess(response) {
-    // await helper.sleep(500)
-     socket.emit('start-game', 'game-started')
+     localStorage.setItem('gameStarted', 'true')
 }
 
 function handleStartGameRequestError(response) {
