@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 })
 
 function handleSocketConnection() {
-    socket = io("http://127.0.0.1:8000")
+    socket = io("http://127.0.0.1:5000")
     socket.on('connect', () => {
         console.log('connected')
     })

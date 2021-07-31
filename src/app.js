@@ -1,7 +1,7 @@
 const express = require('express')
 const app = express()
 const http = require('http')
-const server = http.createServer(app)
+const server = 5000
 const PORT = process.env.PORT || 8000
 const cors = require('cors')
 
@@ -12,4 +12,4 @@ require('dotenv').config()
 require('./service_providers/broadcast_service_provider')(server)
 require('./service_providers/route_service_provider')(app, express)
 
-server.listen(PORT, () => console.log(`Server Running on ${PORT}`))
+app.listen(PORT, () => console.log(`Server Running on ${PORT}`))
