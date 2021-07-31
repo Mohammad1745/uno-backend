@@ -35,7 +35,7 @@
 </div>
 <br>
 
-<div class="container">
+<div class="game-container">
 
   <div class="player1-area">
     <div class="player-area-head">
@@ -96,20 +96,13 @@
   </div>
 
   <div class="mid">
-    <?php
-       for ($x = 0; $x < 4; $x++) {
-         if ($last[$x] != "") { ?>
-         <img class="card" src="img/<?php echo $last[$x]; ?>.png">
-   <?php  }  }
-     ?>
+     <img class="card" src="./public/assets/images/cards/uno.png">
   </div>
 
 </div>
 
-
  <div class="messages" id="messages">
    <ul class="list-ul" id="msgs"></ul>
-
    <form style="text-align: center;">
      <input type="text" class="input-message" id="message" placeholder="Enter message" autocomplete="off">
      <button type="button" id="sendMessage" class="send-message">Send</button>
