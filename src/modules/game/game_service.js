@@ -53,10 +53,8 @@ class GameService extends ResponseService {
                 let cards = Cards()
                 cards.sort(function() { return 0.5 - Math.random() });
                 let index = 0
-                console.log(Object.keys(game.players))
                 Object.keys(game.players).map(key => {
                     database.games[gameId].players[key].cards = cards.filter((card, indx) => (indx >= index && indx <= index+9))
-                    console.log(index)
                     index += 10
                 })
                 database.games[gameId].lastCards =  cards.filter((card, indx) => (indx >= index && indx <= index+3))
