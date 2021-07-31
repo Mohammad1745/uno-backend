@@ -33,26 +33,21 @@
         </div>
     </div>
 </div>
-<br>
 
-<div class="game-container">
+<div class="game-container container-4p-1">
 
   <div class="player1-area">
     <div class="player-area-head">
       Player 1
     </div>
     <div class="player-cards-area">
-      <?php
-         for ($x = 0; $x < count($my_cards); $x++) {
-           if (($last[0][0] == $my_cards[$x][0]) or ($last[0][1] == $my_cards[$x][1]) or ($my_cards[$x][1] == "C")) {
-           ?>
-           <a href="#"><img src="./public/assets/images/cards/<?php echo $my_cards[$x]; ?>.png" class="card card-stack" style="transform: rotate(<?php echo ($x-((count($my_cards)-1)/2))*15; ?>deg);"></a>
-     <?php    }
-     else { ?>
-       <img class="card-stack card" src="./public/assets/images/cards/<?php echo $my_cards[$x]; ?>.png" style="transform: rotate(<?php echo ($x-((count($my_cards)-1)/2))*15; ?>deg);">
-       <?php
-     } }
-       ?>
+      <img src="./public/assets/images/cards/uno.png" class="card card-stack" style="transform: rotate(-45deg);">
+      <img src="./public/assets/images/cards/uno.png" class="card card-stack" style="transform: rotate(-30deg);">
+      <img src="./public/assets/images/cards/uno.png" class="card card-stack" style="transform: rotate(-15deg);">
+      <img src="./public/assets/images/cards/uno.png" class="card card-stack" style="transform: rotate(0deg);">
+      <img src="./public/assets/images/cards/uno.png" class="card card-stack" style="transform: rotate(15deg);">
+      <img src="./public/assets/images/cards/uno.png" class="card card-stack" style="transform: rotate(30deg);">
+      <img src="./public/assets/images/cards/uno.png" class="card card-stack" style="transform: rotate(45deg);">
     </div>
   </div>
 
@@ -61,11 +56,13 @@
       Player 2
     </div>
     <div class="player-cards-area">
-      <?php
-         for ($x = 0; $x < count($bot2); $x++) {?>
-             <img class="card-stack-others card" src="./public/assets/images/cards/uno.png" style="transform: rotate(<?php echo ($x-((count($bot2)-1)/2))*20; ?>deg);">
-     <?php    }
-       ?>
+      <img src="./public/assets/images/cards/uno.png" class="card card-stack-others" style="transform: rotate(-45deg);">
+      <img src="./public/assets/images/cards/uno.png" class="card card-stack-others" style="transform: rotate(-30deg);">
+      <img src="./public/assets/images/cards/uno.png" class="card card-stack-others" style="transform: rotate(-15deg);">
+      <img src="./public/assets/images/cards/uno.png" class="card card-stack-others" style="transform: rotate(0deg);">
+      <img src="./public/assets/images/cards/uno.png" class="card card-stack-others" style="transform: rotate(15deg);">
+      <img src="./public/assets/images/cards/uno.png" class="card card-stack-others" style="transform: rotate(30deg);">
+      <img src="./public/assets/images/cards/uno.png" class="card card-stack-others" style="transform: rotate(45deg);">
     </div>
   </div>
 

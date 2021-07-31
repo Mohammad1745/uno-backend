@@ -274,6 +274,8 @@ body{
 
 .player-cards-area{
   padding: 10px;
+  position: relative;
+  padding-bottom: 120px;
 }
 
 .card{
@@ -287,6 +289,7 @@ body{
 .card-stack{
   transform-origin: center 200%;
   position: absolute;
+  right: 40%;
   transition: transform .5s ease-out;
 }
 .card-stack:hover {
@@ -294,8 +297,9 @@ body{
 }
 
 .card-stack-others{
-  transform-origin: center 200%;
+  transform-origin: center 100%;
   position: absolute;
+  right: 40%;
   transition: transform .1s ease-out;
 }
 
