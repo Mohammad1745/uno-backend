@@ -197,6 +197,7 @@ function startGame(gameId) {
 }
 
 function handleStartGameRequestError(response) {
+    if(response.data.gameStarted)
+        localStorage.setItem('gameStarted', 'true')
     helper.alertMessage("error", response.message)
-    console.log(response.message)
 }

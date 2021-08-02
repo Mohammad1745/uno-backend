@@ -110,6 +110,7 @@ function updateGameContainerGrid(players, userId) {
 function handleCardPlay () {
     let turnUser = localStorage.getItem('turn')
     let userId = localStorage.getItem('userId')
+    let gameId = localStorage.getItem('gameId')
     let turnUserHeader = document.querySelector("#"+turnUser+"_area").querySelector('#player_area_head')
     turnUserHeader.style.backgroundColor = "#F2EDD7"
     turnUserHeader.style.color = "black"
@@ -118,11 +119,33 @@ function handleCardPlay () {
         if(turnUser===userId){
             card.addEventListener('click', event => {
                 let cardName = event.target.getAttribute('data-name')
-                console.log(cardName)
-                //Add new ajax request
+                socket.emit('card-played', 'play-card-success')
+                saveCardPlay({gameId, userId, cardName})
             })
         } else {
             card.classList.remove('cursor-pointer')
         }
     }
+}
+
+function saveCardPlay({gameId, userId, cardName}) {
+    $.ajax({
+        url: helper.DOMAIN + "/api/game/play-card",
+        method: "POST",
+        data: {gameId, userId, card:cardName}
+    }).done(response => {
+        response.success ?
+            handlePlayCardRequestSuccess(response) :
+            handlePlayCardRequestError(response)
+    }).fail(err => {
+        console.log(err)
+    })
+}
+
+function handlePlayCardRequestSuccess(response) {
+}
+
+function handlePlayCardRequestError(response) {
+    helper.alertMessage("error", response.message)
+    console.log(response.message)
 }

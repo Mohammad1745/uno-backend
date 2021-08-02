@@ -48,7 +48,7 @@ class GameService extends ResponseService {
             }
 
             if (game.gameStarted) {
-                return this.response().error("Game Already Started")
+                return this.response(game).error("Game Already Started")
             } else {
                 let cards = Cards()
                 cards.sort(function() { return 0.5 - Math.random() });
@@ -83,6 +83,48 @@ class GameService extends ResponseService {
                 return this.response().error("Wrong Game Id")
             }
             return this.response(game).success('Joined Game Successfully')
+        } catch (e) {
+            return this.response().error(e.message)
+        }
+    }
+
+    /**
+     * @param {Object} request
+     * @return {Object}
+     */
+    playCard = async request => {
+        try {
+            const gameId = request.body.gameId;
+            const userId = request.body.userId;
+            const card = request.body.card;
+
+            let database = this.readData('data.json')
+            let game = database.games[gameId]
+            if (!game) {
+                return this.response().error("Wrong Game Id!")
+            }
+            if (userId!==game.turn) {
+                return this.response().error("Wrong Player!")
+            }
+            const cardIndex = game.players[userId].cards.indexOf(card)
+            if (cardIndex===-1) {
+                return this.response().error("Unknown Card!")
+            }
+            console.log(game.players[userId].cards)
+            game.players[userId].cards = game.players[userId].cards.filter((element, index) => {
+                return index!==cardIndex
+            })
+            console.log(game.players[userId].cards)
+            game.lastCards.unshift(card)
+            game.restCards.unshift(game.lastCards.pop())
+            let playerSerial = Number([...userId].pop())
+            if(Object.keys(game.players).length>playerSerial)
+                game.turn = "player"+(playerSerial+1)
+            else
+                game.turn = "player1"
+            this.writeData('data.json', database)
+
+            return this.response().success('Joined Game Successfully')
         } catch (e) {
             return this.response().error(e.message)
         }
