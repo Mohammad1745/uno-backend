@@ -82,7 +82,6 @@ function updateGameContainers(game) {
           <img class="card" src="./public/assets/images/cards/${game.lastCards[0]}.png"  style="margin-left: -40px;">`
     if(canDraw==="true" && turnUser === userId)
         html += `<button id="draw_card_btn" class="draw-card" >Draw ${numberOfCardCanBeDrawn} Cards</button>`
-    html += `<button id="uno_call_btn" class="uno-call">UNO</button>`
     if(canDraw!=="true" && turnUser === userId)
         html +=`<button id="skip_btn" class="skip-btn">Skip</button>`
     html += `</div>`
