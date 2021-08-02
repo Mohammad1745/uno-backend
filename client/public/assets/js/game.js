@@ -6,8 +6,9 @@ function game() {
 }
 
 function handleSocketGameEvents() {
-    socket.on('card-played', payload => {
+    socket.on('card-played', async payload => {
         let gameId = localStorage.getItem('gameId')
+        await helper.sleep(1000)
         loadGameContainer(gameId)
     })
 }
