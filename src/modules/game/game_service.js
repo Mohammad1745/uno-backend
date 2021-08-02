@@ -167,6 +167,37 @@ class GameService extends ResponseService {
      * @param {Object} request
      * @return {Object}
      */
+    skipPlay = async request => {
+        try {
+            const gameId = request.body.gameId;
+            const userId = request.body.userId;
+
+            let database = this.readData('data.json')
+            let game = database.games[gameId]
+            if (!game) {
+                return this.response().error("Wrong Game Id!")
+            }
+            if (userId!==game.turn) {
+                return this.response().error("Wrong Player!")
+            }
+            game.players[userId].canDraw = true;
+            let playerSerial = Number([...userId].pop())
+            if(Object.keys(game.players).length>playerSerial)
+                game.turn = "player"+(playerSerial+1)
+            else
+                game.turn = "player1"
+            this.writeData('data.json', database)
+
+            return this.response().success('Joined Game Successfully')
+        } catch (e) {
+            return this.response().error(e.message)
+        }
+    }
+
+    /**
+     * @param {Object} request
+     * @return {Object}
+     */
     join = async request => {
         try {
             const username = request.body.username

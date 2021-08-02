@@ -80,10 +80,12 @@ function updateGameContainers(game) {
           <img class="card" src="./public/assets/images/cards/${game.lastCards[2]}.png">
           <img class="card" src="./public/assets/images/cards/${game.lastCards[1]}.png"  style="margin-left: -40px;">
           <img class="card" src="./public/assets/images/cards/${game.lastCards[0]}.png"  style="margin-left: -40px;">`
-    if(numberOfCardCanBeDrawn && turnUser === userId)
+    if(canDraw==="true" && turnUser === userId)
         html += `<button id="draw_card_btn" class="draw-card" >Draw ${numberOfCardCanBeDrawn} Cards</button>`
-    html += `<button id="uno_call_btn" class="uno-call">UNO</button>
-        </div>`
+    html += `<button id="uno_call_btn" class="uno-call">UNO</button>`
+    if(canDraw!=="true" && turnUser === userId)
+        html +=`<button id="skip_btn" class="skip-btn">Skip</button>`
+    html += `</div>`
 
     gameContainer.insertAdjacentHTML('beforeend', html)
     updateGameContainerGrid(game.players, userId)
@@ -130,6 +132,7 @@ function handleCardPlay () {
     turnUserHeader.style.color = "black"
     let playableCards = document.querySelectorAll('.playable-card')
     let drawCardButton = document.getElementById('draw_card_btn')
+    let skipButton = document.getElementById('skip_btn')
     if (canDraw==='true' && drawCardButton){
         if (!playableCards.length && turnUser === userId) {
             drawCardButton.classList.add('must')
@@ -137,6 +140,12 @@ function handleCardPlay () {
         drawCardButton.addEventListener('click', () => {
             socket.emit('card-drawn', 'draw-card-success')
             saveCardDrawing({gameId, userId})
+        })
+    }
+    if (canDraw!=="true" && skipButton) {
+        skipButton.addEventListener('click', () => {
+            socket.emit('card-played', 'play-card-success')
+            saveSkiping({gameId, userId})
         })
     }
     for (let card of playableCards) {
@@ -192,6 +201,28 @@ function handleDrawCardRequestSuccess(response) {
 }
 
 function handleDrawCardRequestError(response) {
+    helper.alertMessage("error", response.message)
+    console.log(response.message)
+}
+
+function saveSkiping({gameId, userId}) {
+    $.ajax({
+        url: helper.DOMAIN + "/api/game/skip-play",
+        method: "POST",
+        data: {gameId, userId}
+    }).done(response => {
+        response.success ?
+            handleSkipPlayRequestSuccess(response) :
+            handleSkipPlayRequestError(response)
+    }).fail(err => {
+        console.log(err)
+    })
+}
+
+function handleSkipPlayRequestSuccess(response) {
+}
+
+function handleSkipPlayRequestError(response) {
     helper.alertMessage("error", response.message)
     console.log(response.message)
 }

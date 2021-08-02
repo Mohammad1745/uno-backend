@@ -10,5 +10,6 @@ route.get('/player-list', gameController.playerList)
 route.get('/start-game', gameController.startGame)
 route.post('/play-card', gameController.playCard)
 route.post('/draw-card', gameController.drawCard)
+route.post('/skip-play', gameController.skipPlay)
 
 module.exports = route

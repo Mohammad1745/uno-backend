@@ -70,6 +70,15 @@ class GameController {
     drawCard = async (request, response) => {
         return response.json(await this.service.drawCard(request))
     }
+
+    /**
+     * @param {Object} request
+     * @param {Object} response
+     * @return {JSON}
+     */
+    skipPlay = async (request, response) => {
+        return response.json(await this.service.skipPlay(request))
+    }
 }
 
 module.exports = new GameController()
