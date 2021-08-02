@@ -15,9 +15,14 @@ module.exports = server => {
         socket.on('player-joining', payload => {
             io.emit('player-joining', payload)
         })
-
         socket.on('start-game', payload => {
             io.emit('start-game', payload)
+        })
+        socket.on('card-played', payload => {
+            io.emit('card-played', payload)
+        })
+        socket.on('card-drawn', payload => {
+            io.emit('card-drawn', payload)
         })
 
         socket.on('disconnect', () => {

@@ -110,11 +110,10 @@ class GameService extends ResponseService {
             if (cardIndex===-1) {
                 return this.response().error("Unknown Card!")
             }
-            console.log(game.players[userId].cards)
             game.players[userId].cards = game.players[userId].cards.filter((element, index) => {
                 return index!==cardIndex
             })
-            console.log(game.players[userId].cards)
+            game.players[userId].canDraw = true;
             game.lastCards.unshift(card)
             game.restCards.unshift(game.lastCards.pop())
             let playerSerial = Number([...userId].pop())
@@ -122,6 +121,40 @@ class GameService extends ResponseService {
                 game.turn = "player"+(playerSerial+1)
             else
                 game.turn = "player1"
+            this.writeData('data.json', database)
+
+            return this.response().success('Joined Game Successfully')
+        } catch (e) {
+            return this.response().error(e.message)
+        }
+    }
+
+    /**
+     * @param {Object} request
+     * @return {Object}
+     */
+    drawCard = async request => {
+        try {
+            const gameId = request.body.gameId;
+            const userId = request.body.userId;
+
+            let database = this.readData('data.json')
+            let game = database.games[gameId]
+            if (!game) {
+                return this.response().error("Wrong Game Id!")
+            }
+            if (userId!==game.turn) {
+                return this.response().error("Wrong Player!")
+            }
+            if (!game.players[userId].canDraw) {
+                return this.response().error("Already Drawn!")
+            }
+            const cardIndex = randomNumber(0, game.restCards.length-1)
+            game.players[userId].cards.push(game.restCards[cardIndex])
+            game.restCards = game.restCards.filter((element, index) => {
+                return index!==cardIndex
+            })
+            game.players[userId].canDraw = false;
             this.writeData('data.json', database)
 
             return this.response().success('Joined Game Successfully')
@@ -155,7 +188,8 @@ class GameService extends ResponseService {
                 database.games[gameId].players[userId] = {
                     username,
                     cards: [],
-                    uno: false
+                    uno: false,
+                    canDraw:true
                 }
                 this.writeData('data.json', database)
                 return this.response({username, gameId, userId}).success('Joined Game Successfully')
@@ -181,7 +215,8 @@ class GameService extends ResponseService {
                     player1: {
                         username: request.body.username,
                         cards: [],
-                        uno: false
+                        uno: false,
+                        canDraw:true
                     }
                 },
                 gameStarted: false,

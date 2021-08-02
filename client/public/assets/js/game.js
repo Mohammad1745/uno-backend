@@ -11,6 +11,11 @@ function handleSocketGameEvents() {
         await helper.sleep(1000)
         loadGameContainer(gameId)
     })
+    socket.on('card-drawn', async payload => {
+        let gameId = localStorage.getItem('gameId')
+        await helper.sleep(1000)
+        loadGameContainer(gameId)
+    })
 }
 
 function loadGameContainer(gameId) {
@@ -29,10 +34,13 @@ function loadGameContainer(gameId) {
 
 function handleLoadGameRequestSuccess(response) {
     console.log(response.data)
+    let game = response.data
     let gameLoginForm = document.getElementById('game_login')
     gameLoginForm.style.display = 'none'
-    localStorage.setItem('turn', response.data.turn)
-    updateGameContainers(response.data)
+    let userId = localStorage.getItem('userId')
+    localStorage.setItem('canDraw', game.players[userId].canDraw)
+    localStorage.setItem('turn', game.turn)
+    updateGameContainers(game)
     handleCardPlay()
 }
 
@@ -45,6 +53,9 @@ function updateGameContainers(game) {
     let gameContainer = document.getElementById('game_container')
     gameContainer.innerHTML = ''
     let userId = localStorage.getItem('userId')
+    let turnUser = localStorage.getItem('turn')
+    let canDraw = localStorage.getItem('canDraw')
+    let numberOfCardCanBeDrawn = canDraw==="true" ? 1 : 0;
     let html = ''
     Object.keys(game.players).map(key => {
         let player = game.players[key]
@@ -68,9 +79,10 @@ function updateGameContainers(game) {
     html += `<div class="mid">
           <img class="card" src="./public/assets/images/cards/${game.lastCards[2]}.png">
           <img class="card" src="./public/assets/images/cards/${game.lastCards[1]}.png"  style="margin-left: -40px;">
-          <img class="card" src="./public/assets/images/cards/${game.lastCards[0]}.png"  style="margin-left: -40px;">
-          <button name="draw_card" class="draw-card must">Draw No. Cards</button>
-          <button name="uno_call" class="uno-call">UNO</button>
+          <img class="card" src="./public/assets/images/cards/${game.lastCards[0]}.png"  style="margin-left: -40px;">`
+    if(numberOfCardCanBeDrawn && turnUser === userId)
+        html += `<button id="draw_card_btn" class="draw-card" >Draw ${numberOfCardCanBeDrawn} Cards</button>`
+    html += `<button id="uno_call_btn" class="uno-call">UNO</button>
         </div>`
 
     gameContainer.insertAdjacentHTML('beforeend', html)
@@ -112,10 +124,21 @@ function handleCardPlay () {
     let turnUser = localStorage.getItem('turn')
     let userId = localStorage.getItem('userId')
     let gameId = localStorage.getItem('gameId')
+    let canDraw = localStorage.getItem('canDraw')
     let turnUserHeader = document.querySelector("#"+turnUser+"_area").querySelector('#player_area_head')
     turnUserHeader.style.backgroundColor = "#F2EDD7"
     turnUserHeader.style.color = "black"
     let playableCards = document.querySelectorAll('.playable-card')
+    let drawCardButton = document.getElementById('draw_card_btn')
+    if (canDraw==='true' && drawCardButton){
+        if (!playableCards.length && turnUser === userId) {
+            drawCardButton.classList.add('must')
+        }
+        drawCardButton.addEventListener('click', () => {
+            socket.emit('card-drawn', 'draw-card-success')
+            saveCardDrawing({gameId, userId})
+        })
+    }
     for (let card of playableCards) {
         if(turnUser===userId){
             card.addEventListener('click', event => {
@@ -147,6 +170,28 @@ function handlePlayCardRequestSuccess(response) {
 }
 
 function handlePlayCardRequestError(response) {
+    helper.alertMessage("error", response.message)
+    console.log(response.message)
+}
+
+function saveCardDrawing({gameId, userId}) {
+    $.ajax({
+        url: helper.DOMAIN + "/api/game/draw-card",
+        method: "POST",
+        data: {gameId, userId}
+    }).done(response => {
+        response.success ?
+            handleDrawCardRequestSuccess(response) :
+            handleDrawCardRequestError(response)
+    }).fail(err => {
+        console.log(err)
+    })
+}
+
+function handleDrawCardRequestSuccess(response) {
+}
+
+function handleDrawCardRequestError(response) {
     helper.alertMessage("error", response.message)
     console.log(response.message)
 }

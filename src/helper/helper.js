@@ -16,12 +16,5 @@ module.exports = {
         ]
     },
 
-    randomNumber : (length = 10) => {
-        let response = ''
-        for (let i = 0; i < length; i++) {
-            let y = Math.random()*100
-            response += String(y).substr(String(y).length-1, 1)
-        }
-        return response;
-    }
+    randomNumber : (min, max) => Math.floor(Math.random() * (max - min) + min)
 }
