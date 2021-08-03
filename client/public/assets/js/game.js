@@ -38,6 +38,7 @@ function handleLoadGameRequestSuccess(response) {
     let gameLoginForm = document.getElementById('game_login')
     gameLoginForm.style.display = 'none'
     let userId = localStorage.getItem('userId')
+    localStorage.setItem('gameStarted', 'true')
     localStorage.setItem('canDraw', game.players[userId].canDraw)
     localStorage.setItem('turn', game.turn)
     updateGameContainers(game)
@@ -145,7 +146,7 @@ function handleCardPlay () {
     if (canDraw!=="true" && skipButton) {
         skipButton.addEventListener('click', () => {
             socket.emit('card-played', 'play-card-success')
-            saveSkiping({gameId, userId})
+            saveSkipping({gameId, userId})
         })
     }
     for (let card of playableCards) {
@@ -205,7 +206,7 @@ function handleDrawCardRequestError(response) {
     console.log(response.message)
 }
 
-function saveSkiping({gameId, userId}) {
+function saveSkipping({gameId, userId}) {
     $.ajax({
         url: helper.DOMAIN + "/api/game/skip-play",
         method: "POST",
