@@ -39,8 +39,12 @@ function handleLoadGameRequestSuccess(response) {
     gameLoginForm.style.display = 'none'
     let userId = localStorage.getItem('userId')
     localStorage.setItem('gameStarted', 'true')
-    localStorage.setItem('canDraw', game.players[userId].canDraw)
     localStorage.setItem('turn', game.turn)
+    localStorage.setItem('color', game.color)
+    if (game.players[userId].canDraw)
+        localStorage.setItem('cardsCount', game.cardsCount)
+    else
+        localStorage.setItem('cardsCount', 0)
     updateGameContainers(game)
     handleCardPlay()
 }
@@ -55,8 +59,8 @@ function updateGameContainers(game) {
     gameContainer.innerHTML = ''
     let userId = localStorage.getItem('userId')
     let turnUser = localStorage.getItem('turn')
-    let canDraw = localStorage.getItem('canDraw')
-    let numberOfCardCanBeDrawn = canDraw==="true" ? 1 : 0;
+    let cardsCount = localStorage.getItem('cardsCount')
+    let color = localStorage.getItem('color')
     let html = ''
     Object.keys(game.players).map(key => {
         let player = game.players[key]
@@ -67,7 +71,8 @@ function updateGameContainers(game) {
             <div class="player-cards-area">`
         Object.keys(player.cards).map(index => {
             let rotation = (index-((player.cards.length-1)/2))*15
-            if (key===userId && (game.lastCards[0][0] === player.cards[index][0] || game.lastCards[0][1] === player.cards[index][1] || player.cards[index][1] === "C"))
+            if (key===userId && ((game.lastCards[0][0] === player.cards[index][0] || player.cards[index][1] === color || player.cards[index][1] === "C")
+            || (Number(cardsCount)>1 && ['d','f','c'].includes(player.cards[index][0]))))
                 html += `<img src="./public/assets/images/cards/${player.cards[index]}.png" data-name="${player.cards[index]}" class="card card-stack playable-card cursor-pointer" style="transform: rotate(${rotation}deg);">`
             else {
                 let className = key === userId ? "card-stack" : "card-stack-others"
@@ -81,10 +86,10 @@ function updateGameContainers(game) {
           <img class="card" src="./public/assets/images/cards/${game.lastCards[2]}.png">
           <img class="card" src="./public/assets/images/cards/${game.lastCards[1]}.png"  style="margin-left: -40px;">
           <img class="card" src="./public/assets/images/cards/${game.lastCards[0]}.png"  style="margin-left: -40px;">`
-    if(canDraw==="true" && turnUser === userId)
-        html += `<button id="draw_card_btn" class="draw-card" >Draw ${numberOfCardCanBeDrawn} Cards</button>`
+    if(Number(cardsCount) && turnUser === userId)
+        html += `<button id="draw_card_btn" class="draw-card" >Draw ${cardsCount} Cards</button>`
     html += `<button id="uno_call_btn" class="uno-call">UNO</button>`
-    if(canDraw!=="true" && turnUser === userId)
+    if(!Number(cardsCount) && turnUser === userId)
         html +=`<button id="skip_btn" class="skip-btn">Skip</button>`
     html += `</div>`
 
@@ -127,14 +132,14 @@ function handleCardPlay () {
     let turnUser = localStorage.getItem('turn')
     let userId = localStorage.getItem('userId')
     let gameId = localStorage.getItem('gameId')
-    let canDraw = localStorage.getItem('canDraw')
+    let cardsCount = localStorage.getItem('cardsCount')
     let turnUserHeader = document.querySelector("#"+turnUser+"_area").querySelector('#player_area_head')
     turnUserHeader.style.backgroundColor = "#F2EDD7"
     turnUserHeader.style.color = "black"
     let playableCards = document.querySelectorAll('.playable-card')
     let drawCardButton = document.getElementById('draw_card_btn')
     let skipButton = document.getElementById('skip_btn')
-    if (canDraw==='true' && drawCardButton){
+    if (Number(cardsCount) && drawCardButton){
         if (!playableCards.length && turnUser === userId) {
             drawCardButton.classList.add('must')
         }
@@ -143,7 +148,7 @@ function handleCardPlay () {
             saveCardDrawing({gameId, userId})
         })
     }
-    if (canDraw!=="true" && skipButton) {
+    if (!Number(cardsCount) && skipButton) {
         skipButton.addEventListener('click', () => {
             socket.emit('card-played', 'play-card-success')
             saveSkipping({gameId, userId})
@@ -153,8 +158,9 @@ function handleCardPlay () {
         if(turnUser===userId){
             card.addEventListener('click', event => {
                 let cardName = event.target.getAttribute('data-name')
+                let color = cardName[0]==='f' || cardName[0]==='c' ? 'Y' : cardName[1]//TODO::change 'Y' with user input
                 socket.emit('card-played', 'play-card-success')
-                saveCardPlay({gameId, userId, cardName})
+                saveCardPlay({gameId, userId, cardName, color})
             })
         } else {
             card.classList.remove('cursor-pointer')
@@ -162,11 +168,11 @@ function handleCardPlay () {
     }
 }
 
-function saveCardPlay({gameId, userId, cardName}) {
+function saveCardPlay({gameId, userId, cardName, color}) {
     $.ajax({
         url: helper.DOMAIN + "/api/game/play-card",
         method: "POST",
-        data: {gameId, userId, card:cardName}
+        data: {gameId, userId, card:cardName, color}
     }).done(response => {
         response.success ?
             handlePlayCardRequestSuccess(response) :

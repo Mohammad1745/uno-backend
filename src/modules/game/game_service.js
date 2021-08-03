@@ -54,13 +54,14 @@ class GameService extends ResponseService {
                 cards.sort(function() { return 0.5 - Math.random() });
                 let index = 0
                 Object.keys(game.players).map(key => {
-                    database.games[gameId].players[key].cards = cards.filter((card, indx) => (indx >= index && indx <= index+9))
+                    game.players[key].cards = cards.filter((card, indx) => (indx >= index && indx <= index+9))
                     index += 10
                 })
-                database.games[gameId].lastCards =  cards.filter((card, indx) => (indx >= index && indx <= index+3))
+                game.lastCards =  cards.filter((card, indx) => (indx >= index && indx <= index+3))
                 index += 4
-                database.games[gameId].restCards =  cards.filter((card, indx) => (indx >= index))
-                database.games[gameId].gameStarted = true
+                game.restCards =  cards.filter((card, indx) => (indx >= index))
+                game.gameStarted = true
+                game.color = game.lastCards[0][1]
                 this.writeData('data.json', database)
                 return this.response().success('Joined Game Successfully')
             }
@@ -96,9 +97,13 @@ class GameService extends ResponseService {
         try {
             let skip = false
             let reverse = false
+            let double = false
+            let power = false
+
             const gameId = request.body.gameId;
             const userId = request.body.userId;
             const card = request.body.card;
+            const color = request.body.color;
 
             let database = this.readData('data.json')
             let game = database.games[gameId]
@@ -109,24 +114,48 @@ class GameService extends ResponseService {
             if (userId!==game.turn) {
                 return this.response().error("Wrong Player!")
             }
-            const cardIndex = game.players[userId].cards.indexOf(card)
-            if (cardIndex===-1) {
-                return this.response().error("Unknown Card!")
+
+            let cardIndex = game.players[userId].cards.indexOf(card)
+            if(game.cardsCount>1){
+                cardIndex = ['d','f','c'].indexOf(card[0])
             }
+            if (cardIndex===-1) {
+                return this.response().error("Wrong Card!")
+            }
+
             if ([...card][0]==='s') {
                 skip = true
             }else if ([...card][0]==='r') {
                 reverse = true
                 game.direction = game.direction === "clockwise" ? "anticlockwise" : "clockwise"
+            }else if ([...card][0]==='d') {
+                double = true
+                game.cardsCount = game.cardsCount === 1 ? 2 : game.cardsCount+2
+            }else if ([...card][0]==='f') {
+                power = true
+                game.cardsCount = game.cardsCount === 1 ? 4 : game.cardsCount+4
+            }else if ([...card][0]==='c') {
+                power = true
+                game.cardsCount = 1
             }
+
+            if (!double && !power && card[0]!==game.lastCards[0][0] && card[1]!==game.color) {
+                return this.response().error("Wrong Card!")
+            }
+
             game.players[userId].cards = game.players[userId].cards.filter((element, index) => {
                 return index!==cardIndex
             })
             game.players[userId].canDraw = true;
             game.lastCards.unshift(card)
             game.restCards.unshift(game.lastCards.pop())
-            let playerSerial = Number([...userId].pop())
 
+            if (power)
+                game.color = color
+            else
+                game.color = game.lastCards[0][1]
+
+            let playerSerial = Number([...userId].pop())
             if ((skip || reverse) && players.length===2) {
                 //same player
             }
@@ -162,6 +191,7 @@ class GameService extends ResponseService {
 
             let database = this.readData('data.json')
             let game = database.games[gameId]
+            let players = Object.keys(game.players)
             if (!game) {
                 return this.response().error("Wrong Game Id!")
             }
@@ -171,12 +201,10 @@ class GameService extends ResponseService {
             game.players[userId].canDraw = true;
             let playerSerial = Number([...userId].pop())
 
-            if(game.direction==="clockwise" && playerSerial<Object.keys(game.players).length)
-                game.turn = "player"+(playerSerial+1)
-            else if(game.direction==="anticlockwise" && playerSerial>1)
-                game.turn = "player"+(playerSerial-1)
-            else
-                game.turn = "player1"
+            if(game.direction==="clockwise" )
+                game.turn = playerSerial<players.length ? "player"+(playerSerial+1) : "player1"
+            else if(game.direction==="anticlockwise")
+                game.turn = playerSerial>1 ? "player"+(playerSerial-1) : players.pop()
 
             this.writeData('data.json', database)
 
@@ -206,12 +234,19 @@ class GameService extends ResponseService {
             if (!game.players[userId].canDraw) {
                 return this.response().error("Already Drawn!")
             }
-            const cardIndex = randomNumber(0, game.restCards.length-1)
-            game.players[userId].cards.push(game.restCards[cardIndex])
-            game.restCards = game.restCards.filter((element, index) => {
-                return index!==cardIndex
-            })
+            for (let i = 0; i < game.cardsCount; i++){
+                const cardIndex = randomNumber(0, game.restCards.length - 1)
+                game.players[userId].cards.push(game.restCards[cardIndex])
+                game.restCards = game.restCards.filter((element, index) => {
+                    return index !== cardIndex
+                })
+            }
             game.players[userId].canDraw = false;
+            if(game.cardsCount>1){
+                game.cardsCount = 1
+                game.players[userId].canDraw = true;
+            }
+
             this.writeData('data.json', database)
 
             return this.response().success('Joined Game Successfully')
@@ -279,6 +314,7 @@ class GameService extends ResponseService {
                 gameStarted: false,
                 direction: "clockwise",
                 turn: "player2",
+                color: '',
                 cardsCount: 1,
                 result: [],
                 lastCards: [],
