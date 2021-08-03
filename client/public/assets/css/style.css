@@ -175,13 +175,6 @@ body{
   display: grid;
   grid-template-columns: auto;
   grid-template-rows: auto;
-  /*grid-template-areas:*/
-  /*  ". player3-area ."*/
-  /*  ". player3-area ."*/
-  /*  "player2-area mid player4-area"*/
-  /*  "player2-area mid player4-area"*/
-  /*  ". player1-area ."*/
-  /*  ". player1-area .";*/
 }
 .container-2p-1{
   grid-template-areas:
@@ -385,6 +378,78 @@ body{
     100% { background-position: 0 0; }
 }
 
+.color-popup-container{
+  display: none;
+  position: fixed;
+  text-align: center;
+  padding: 50px;
+  top: 0;
+  left: 0;
+  background-color: rgba(0,0,0,0.7);
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+}
+.choose-color{
+  margin-top: 100px;
+  position: relative;
+  right: 50%;
+  left: 50%;
+  transform: translate(-50%, 0);
+  display: grid;
+  grid-template-columns: auto;
+  grid-template-rows: auto;
+  align-items: center;
+  justify-content: center;
+  gap: 0 0;
+  grid-template-areas:
+                "red blue"
+                "yellow green"
+}
+.red{
+  grid-area: red;
+  height: 100px;
+  width: 100px;
+  background-color: red;
+  margin: 3px;
+  border-radius: 100% 0 0 0;
+}
+.yellow{
+  grid-area: yellow;
+  height: 100px;
+  width: 100px;
+  background-color: yellow;
+  margin: 3px;
+  border-radius: 0 0 0 100%;
+}
+.blue{
+  grid-area: blue;
+  height: 100px;
+  width: 100px;
+  background-color: blue;
+  margin: 3px;
+  border-radius: 0 100% 0 0;
+}
+.green{
+  grid-area: green;
+  height: 100px;
+  width: 100px;
+  background-color: green;
+  margin: 3px;
+  border-radius: 0 0 100% 0;
+}
+.red:hover{
+  box-shadow: 0 0 5px 5px red;
+}
+.yellow:hover{
+  box-shadow: 0 0 5px 5px yellow;
+}
+.blue:hover{
+  box-shadow: 0 0 5px 5px blue;
+}
+.green:hover{
+  box-shadow: 0 0 5px 5px green;
+}
 
 
 /* CHAT SECTION */
