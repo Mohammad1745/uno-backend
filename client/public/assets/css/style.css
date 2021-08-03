@@ -8,6 +8,7 @@
   --secondary: #F2EDD7;
   --third: #3A6351;
   --fourth: #A0937D;
+
 }
 
 body{
@@ -31,50 +32,22 @@ body{
 
 .header{
   background-color: var(--secondary);
-  border:2px solid var(--fourth);
+  border: 3px solid var(--secondary);
   color:var(--third);
   display: flex;
   justify-content: space-around;
   align-items: center;
 }
 
+.uno-brand{
+  width: 100px;
+  margin: 10px;
+}
+
 .head{
   margin: 10px;
   color: red;
 }
-
-.uno{
-  text-align: center;
-  color: red;
-  animation: blur .5s ease-out 10;
-}
-
-@keyframes blur {
-  from {
-    text-shadow:0px 0px 10px #fff,
-      0px 0px 10px #fff,
-      0px 0px 25px #fff,
-      0px 0px 25px #fff,
-      0px 0px 25px #fff,
-      0px 0px 25px #fff,
-      0px 0px 50px #fff,
-      0px 0px 50px #fff,
-      0px 0px 50px red,
-      0px 0px 50px red,
-      0px 10px 100px red,
-      0px 10px 100px red,
-      0px 10px 100px red,
-      0px 10px 100px red,
-      0px -10px 100px red,
-      0px -10px 100px red;
-  }
-  0% {color: red;}
-  25% {color: purple;}
-  50% {color: green;}
-  75% {color: orange;}
-  100% {color: yellow;}
-}
-
 .ENBN {
   border: none;
   padding: 10px;
@@ -198,10 +171,16 @@ body{
 /* DASHBOARD */
 
 .game-container {
-  padding-top: 10px;
   display: grid;
   grid-template-columns: auto;
   grid-template-rows: auto;
+  /*grid-template-areas:*/
+  /*  ". player3-area ."*/
+  /*  ". player3-area ."*/
+  /*  "player2-area mid player4-area"*/
+  /*  "player2-area mid player4-area"*/
+  /*  ". player1-area ."*/
+  /*  ". player1-area .";*/
 }
 .container-2p-1{
   grid-template-areas:
@@ -258,35 +237,30 @@ body{
 .player1-area {
   grid-area: player1-area;
   text-align: center;
-  border: 2px solid var(--secondary);
-  border-radius:30px;
 }
 
 .player2-area {
   grid-area: player2-area;
   text-align: center;
-  border: 2px solid var(--secondary);
-  border-radius:30px;
 }
 .player3-area {
   grid-area: player3-area;
   text-align: center;
-  border: 2px solid var(--secondary);
-  border-radius:30px;
 }
 .player4-area {
   grid-area: player4-area;
   text-align: center;
-  border: 2px solid var(--secondary);
-  border-radius:30px;
 }
 .mid{
   grid-area: mid;
   text-align: center;
-  border: 2px solid var(--third);
+  border: 2px solid var(--secondary);
   margin: 20px;
   border-radius: 20px;
-  padding: 10px;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
 }
 
 .player-area-head{
@@ -301,7 +275,7 @@ body{
 .player-cards-area{
   padding: 10px;
   position: relative;
-  padding-bottom: 120px;
+  padding-bottom: 100px;
 }
 
 .card{
@@ -339,6 +313,7 @@ body{
   background-color: var(--secondary);
   color: var(--third);
 }
+
 .skip-btn,
 .uno-call{
   border: none;
@@ -515,6 +490,53 @@ body{
   color: black;
 }
 
+.devs{
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.dev-link{
+  background-color: var(--primary);
+  color: var(--secondary);
+  margin: 5px;
+  padding: 5px 10px;
+  border-radius: 5px;
+  transition: color 0.5s, background-color 0.5s;
+  position: relative;
+}
+
+.dev-link:hover{
+  background-color: green;
+  color: red;
+  margin: 5px;
+  padding: 5px 10px;
+  border-radius: 5px;
+}
+
+.dev-link .tips{
+  visibility: hidden;
+  width: 120px;
+  background-color: #555;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+  position: absolute;
+  z-index: 1;
+  bottom: 125%;
+  left: 50%;
+  margin-left: -60px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.dev-link:hover .tips{
+  visibility: visible;
+  opacity: 1;
+}
+
+
 /* RULES */
 
 .rules-container{
@@ -558,6 +580,18 @@ body{
 .rules-cards-section>img{
   width: 8%;
   margin: 1px;
+}
+
+.rule-content table th{
+  background-color: rgba(0,0,0,0.3);
+  padding: 10px 20px;
+  border: 1px solid black;
+}
+
+.rule-content table td{
+  background-color: rgba(0,0,0,0.1);
+  padding: 10px 20px;
+  border: 1px solid black;
 }
 
 
