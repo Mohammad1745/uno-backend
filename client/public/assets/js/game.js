@@ -226,4 +226,3 @@ function handleSkipPlayRequestError(response) {
     helper.alertMessage("error", response.message)
     console.log(response.message)
 }
-//TODO::direction of playing
