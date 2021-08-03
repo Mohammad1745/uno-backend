@@ -94,12 +94,15 @@ class GameService extends ResponseService {
      */
     playCard = async request => {
         try {
+            let skip = false
+            let reverse = false
             const gameId = request.body.gameId;
             const userId = request.body.userId;
             const card = request.body.card;
 
             let database = this.readData('data.json')
             let game = database.games[gameId]
+            let players = Object.keys(game.players)
             if (!game) {
                 return this.response().error("Wrong Game Id!")
             }
@@ -110,6 +113,12 @@ class GameService extends ResponseService {
             if (cardIndex===-1) {
                 return this.response().error("Unknown Card!")
             }
+            if ([...card][0]==='s') {
+                skip = true
+            }else if ([...card][0]==='r') {
+                reverse = true
+                game.direction = game.direction === "clockwise" ? "anticlockwise" : "clockwise"
+            }
             game.players[userId].cards = game.players[userId].cards.filter((element, index) => {
                 return index!==cardIndex
             })
@@ -117,10 +126,58 @@ class GameService extends ResponseService {
             game.lastCards.unshift(card)
             game.restCards.unshift(game.lastCards.pop())
             let playerSerial = Number([...userId].pop())
-            if(Object.keys(game.players).length>playerSerial)
+
+            if ((skip || reverse) && players.length===2) {
+                //same player
+            }
+            if (skip && players.length>2) {
+                if(game.direction==="clockwise" )
+                    game.turn = playerSerial<players.length-1 ? "player"+(playerSerial+2) : "player1"
+                else if(game.direction==="anticlockwise")
+                    game.turn = playerSerial>2 ? "player"+(playerSerial-2) : players.pop()
+            }
+            else {
+                if(game.direction==="clockwise" )
+                    game.turn = playerSerial<players.length ? "player"+(playerSerial+1) : "player1"
+                else if(game.direction==="anticlockwise")
+                    game.turn = playerSerial>1 ? "player"+(playerSerial-1) : players.pop()
+            }
+
+            this.writeData('data.json', database)
+
+            return this.response().success('Joined Game Successfully')
+        } catch (e) {
+            return this.response().error(e.message)
+        }
+    }
+
+    /**
+     * @param {Object} request
+     * @return {Object}
+     */
+    skipPlay = async request => {
+        try {
+            const gameId = request.body.gameId;
+            const userId = request.body.userId;
+
+            let database = this.readData('data.json')
+            let game = database.games[gameId]
+            if (!game) {
+                return this.response().error("Wrong Game Id!")
+            }
+            if (userId!==game.turn) {
+                return this.response().error("Wrong Player!")
+            }
+            game.players[userId].canDraw = true;
+            let playerSerial = Number([...userId].pop())
+
+            if(game.direction==="clockwise" && playerSerial<Object.keys(game.players).length)
                 game.turn = "player"+(playerSerial+1)
+            else if(game.direction==="anticlockwise" && playerSerial>1)
+                game.turn = "player"+(playerSerial-1)
             else
                 game.turn = "player1"
+
             this.writeData('data.json', database)
 
             return this.response().success('Joined Game Successfully')
@@ -155,37 +212,6 @@ class GameService extends ResponseService {
                 return index!==cardIndex
             })
             game.players[userId].canDraw = false;
-            this.writeData('data.json', database)
-
-            return this.response().success('Joined Game Successfully')
-        } catch (e) {
-            return this.response().error(e.message)
-        }
-    }
-
-    /**
-     * @param {Object} request
-     * @return {Object}
-     */
-    skipPlay = async request => {
-        try {
-            const gameId = request.body.gameId;
-            const userId = request.body.userId;
-
-            let database = this.readData('data.json')
-            let game = database.games[gameId]
-            if (!game) {
-                return this.response().error("Wrong Game Id!")
-            }
-            if (userId!==game.turn) {
-                return this.response().error("Wrong Player!")
-            }
-            game.players[userId].canDraw = true;
-            let playerSerial = Number([...userId].pop())
-            if(Object.keys(game.players).length>playerSerial)
-                game.turn = "player"+(playerSerial+1)
-            else
-                game.turn = "player1"
             this.writeData('data.json', database)
 
             return this.response().success('Joined Game Successfully')
@@ -251,7 +277,12 @@ class GameService extends ResponseService {
                     }
                 },
                 gameStarted: false,
-                turn: "player2"
+                direction: "clockwise",
+                turn: "player2",
+                cardsCount: 1,
+                result: [],
+                lastCards: [],
+                restCards: []
             }
             this.writeData('data.json', database)
 
