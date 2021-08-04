@@ -49,6 +49,8 @@ function handleLoadGameRequestSuccess(response) {
     Object.keys(game.players).map(playerId => {
         if (game.players[playerId].uno)
             localStorage.setItem(playerId+"_uno", 'true')
+        else
+            localStorage.removeItem(playerId+"_uno")
     })
     updateGameContainers(game)
     handleCardPlay()

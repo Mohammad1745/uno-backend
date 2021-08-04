@@ -256,6 +256,7 @@ class GameService extends ResponseService {
                     return index !== cardIndex
                 })
             }
+            game.players[userId].uno = false;
             game.players[userId].canDraw = false;
             if(game.cardsCount>1){
                 game.cardsCount = 1
