@@ -117,11 +117,13 @@ class GameService extends ResponseService {
 
             let cardIndex = game.players[userId].cards.indexOf(card)
             if(game.cardsCount>1){
-                cardIndex = ['d','f','c'].indexOf(card[0])
+                cardIndex = ['d','f','c'].indexOf(card[0])===-1 ? -1 : cardIndex
             }
             if (cardIndex===-1) {
                 return this.response().error("Wrong Card!")
             }
+            console.log(card, 'card')
+            console.log(cardIndex, 'cardIndex')
 
             if ([...card][0]==='s') {
                 skip = true

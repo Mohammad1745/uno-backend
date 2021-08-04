@@ -61,6 +61,8 @@ function updateGameContainers(game) {
     let turnUser = localStorage.getItem('turn')
     let cardsCount = localStorage.getItem('cardsCount')
     let color = localStorage.getItem('color')
+    let lastCard = game.lastCards[0][0]==='f' || game.lastCards[0][0]==='c' ? game.lastCards[0]+color :  game.lastCards[0]
+
     let html = ''
     Object.keys(game.players).map(key => {
         let player = game.players[key]
@@ -85,7 +87,7 @@ function updateGameContainers(game) {
     html += `<div class="mid">
           <img class="card" src="./public/assets/images/cards/${game.lastCards[2]}.png">
           <img class="card" src="./public/assets/images/cards/${game.lastCards[1]}.png"  style="margin-left: -40px;">
-          <img class="card" src="./public/assets/images/cards/${game.lastCards[0]}.png"  style="margin-left: -40px;">`
+          <img class="card" src="./public/assets/images/cards/${lastCard}.png"  style="margin-left: -40px;">`
     if(Number(cardsCount) && turnUser === userId)
         html += `<button id="draw_card_btn" class="draw-card" >Draw ${cardsCount} Cards</button>`
     html += `<button id="uno_call_btn" class="uno-call">UNO</button>`
@@ -158,14 +160,42 @@ function handleCardPlay () {
         if(turnUser===userId){
             card.addEventListener('click', event => {
                 let cardName = event.target.getAttribute('data-name')
-                let color = cardName[0]==='f' || cardName[0]==='c' ? 'Y' : cardName[1]//TODO::change 'Y' with user input
-                socket.emit('card-played', 'play-card-success')
-                saveCardPlay({gameId, userId, cardName, color})
+                console.log(cardName, 'card-name')
+                let color = cardName[1]
+                if(cardName[0]==='f' || cardName[0]==='c')
+                    chooseColor({gameId, userId, cardName, color})
+                else {
+                    socket.emit('card-played', 'play-card-success')
+                    saveCardPlay({gameId, userId, cardName, color})
+                }
+
             })
         } else {
             card.classList.remove('cursor-pointer')
         }
     }
+}
+
+function chooseColor({gameId, userId, cardName, color}) {
+    let content = `
+        <div class="color-popup-container" id="color_popup_container">
+          Choose a color
+          <div class="choose-color" id="choose_color">
+            <div class="red cursor-pointer" id="red" data-color="R"></div>
+            <div class="blue cursor-pointer" id="blue" data-color="B"></div>
+            <div class="yellow cursor-pointer" id="yellow" data-color="Y"></div>
+            <div class="green cursor-pointer" id="green" data-color="G"></div>
+          </div>
+        </div>`
+    document.body.insertAdjacentHTML('beforeend', content)
+
+    let chooseColorDom = document.getElementById('color_popup_container')
+    chooseColorDom.addEventListener('click', event => {
+        chooseColorDom.remove()
+        color = event.target.getAttribute('data-color')
+        socket.emit('card-played', 'play-card-success')
+        saveCardPlay({gameId, userId, cardName, color})
+    })
 }
 
 function saveCardPlay({gameId, userId, cardName, color}) {
