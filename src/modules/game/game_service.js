@@ -122,8 +122,6 @@ class GameService extends ResponseService {
             if (cardIndex===-1) {
                 return this.response().error("Wrong Card!")
             }
-            console.log(card, 'card')
-            console.log(cardIndex, 'cardIndex')
 
             if ([...card][0]==='s') {
                 skip = true
@@ -173,6 +171,21 @@ class GameService extends ResponseService {
                 else if(game.direction==="anticlockwise")
                     game.turn = playerSerial>1 ? "player"+(playerSerial-1) : players.pop()
             }
+            //Check other players uno
+            players.map(playerId => {
+                let playerCardCount =  Object.keys(game.players[playerId].cards).length
+                let playerUnoCall =  game.players[playerId].uno
+                if (playerId!==userId && playerCardCount===1 && !playerUnoCall) {
+                    let penalty = 2
+                    for (let i = 0; i < penalty; i++){
+                        const cardIndex = randomNumber(0, game.restCards.length - 1)
+                        game.players[playerId].cards.push(game.restCards[cardIndex])
+                        game.restCards = game.restCards.filter((element, index) => {
+                            return index !== cardIndex
+                        })
+                    }
+                }
+            })
 
             this.writeData('data.json', database)
 
