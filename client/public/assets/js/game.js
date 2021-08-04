@@ -57,6 +57,7 @@ function handleLoadGameRequestError(response) {
 function updateGameContainers(game) {
     let gameContainer = document.getElementById('game_container')
     gameContainer.innerHTML = ''
+
     let userId = localStorage.getItem('userId')
     let turnUser = localStorage.getItem('turn')
     let cardsCount = localStorage.getItem('cardsCount')
@@ -96,6 +97,9 @@ function updateGameContainers(game) {
     html += `</div>`
 
     gameContainer.insertAdjacentHTML('beforeend', html)
+
+    let turnUserHeader = document.querySelector("#"+turnUser+"_area").querySelector('#player_area_head')
+    turnUserHeader.classList.add('player-turn')
     updateGameContainerGrid(game.players, userId)
 }
 
@@ -135,9 +139,9 @@ function handleCardPlay () {
     let userId = localStorage.getItem('userId')
     let gameId = localStorage.getItem('gameId')
     let cardsCount = localStorage.getItem('cardsCount')
-    let turnUserHeader = document.querySelector("#"+turnUser+"_area").querySelector('#player_area_head')
-    turnUserHeader.style.backgroundColor = "#F2EDD7"
-    turnUserHeader.style.color = "black"
+    // let turnUserHeader = document.querySelector("#"+turnUser+"_area").querySelector('#player_area_head')
+    // turnUserHeader.style.backgroundColor = "#F2EDD7"
+    // turnUserHeader.style.color = "black"
     let playableCards = document.querySelectorAll('.playable-card')
     let drawCardButton = document.getElementById('draw_card_btn')
     let skipButton = document.getElementById('skip_btn')
