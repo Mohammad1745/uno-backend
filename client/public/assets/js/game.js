@@ -73,7 +73,7 @@ function updateGameContainers(game) {
             <div class="player-cards-area">`
         Object.keys(player.cards).map(index => {
             let rotation = (index-((player.cards.length-1)/2))*15
-            if (key===userId && ((game.lastCards[0][0] === player.cards[index][0] || player.cards[index][1] === color || player.cards[index][1] === "C")
+            if (key===userId && (Number(cardsCount)<=1 && (game.lastCards[0][0] === player.cards[index][0] || player.cards[index][1] === color || player.cards[index][1] === "C")
             || (Number(cardsCount)>1 && ['d','f','c'].includes(player.cards[index][0]))))
                 html += `<img src="./public/assets/images/cards/${player.cards[index]}.png" data-name="${player.cards[index]}" class="card card-stack playable-card cursor-pointer" style="transform: rotate(${rotation}deg);">`
             else {
