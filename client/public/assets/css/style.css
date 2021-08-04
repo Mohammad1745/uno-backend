@@ -328,14 +328,17 @@ body{
   transition: transform .1s ease-out;
 }
 
-.draw-card{
-  width: 70px;
+.draw-card,
+.play-again-btn{
   height: 100px;
   border-radius: 5px;
   margin: 5px;
   margin-left: 15px;
   background-color: var(--secondary);
   color: var(--third);
+}
+.draw-card{
+  width: 70px;
 }
 
 .skip-btn,

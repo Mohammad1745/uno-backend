@@ -47,20 +47,27 @@ class GameService extends ResponseService {
                 return this.response().error("Wrong Game Id")
             }
 
-            if (game.gameStarted) {
+            if (game.gameStarted && !game.gameEnded) {
                 return this.response(game).error("Game Already Started")
             } else {
                 let cards = Cards()
                 cards.sort(function() { return 0.5 - Math.random() });
                 let index = 0
                 Object.keys(game.players).map(key => {
+                    game.players[key].uno = false
+                    game.players[key].canDraw = true
+                    game.players[key].position = null
                     game.players[key].cards = cards.filter((card, indx) => (indx >= index && indx <= index+9))
                     index += 10
                 })
-                game.lastCards =  cards.filter((card, indx) => (indx >= index && indx <= index+3))
-                index += 4
+                game.lastCards =  cards.filter((card, indx) => (indx >= index && indx <= index+2))
+                index += 3
                 game.restCards =  cards.filter((card, indx) => (indx >= index))
                 game.gameStarted = true
+                game.gameEnded = false
+                game.turn = "player2"
+                game.direction = "clockwise"
+                game.cardsCount = 1
                 game.color = game.lastCards[0][1]
                 this.writeData('data.json', database)
                 return this.response().success('Joined Game Successfully')
@@ -146,6 +153,26 @@ class GameService extends ResponseService {
             game.players[userId].cards = game.players[userId].cards.filter((element, index) => {
                 return index!==cardIndex
             })
+            //player position
+            if (!game.players[userId].cards.length) {
+                let position = ['1st', '2nd', '3rd', '4th']
+                game.result.push(userId)
+                game.players[userId].position = position[game.result.length-1];
+                if(players.length-game.result.length<2){
+                    let lastPlayerId = Object.keys(game.players).filter(playerId => {
+                        return !game.result.includes(playerId)
+                    })[0]
+                    game.result.push(lastPlayerId)
+                    game.turn = null
+                    game.gameEnded = true
+                    game.players[lastPlayerId].cards = []
+                    game.players[lastPlayerId].position = position[game.result.length-1]
+
+                    this.writeData('data.json', database)
+
+                    return this.response().success('Game Ended')
+                }
+            }
             game.players[userId].canDraw = true;
             game.lastCards.unshift(card)
             game.restCards.unshift(game.lastCards.pop())
@@ -156,20 +183,39 @@ class GameService extends ResponseService {
                 game.color = game.lastCards[0][1]
 
             let playerSerial = Number([...userId].pop())
-            if ((skip || reverse) && players.length===2) {
+            if ((skip || reverse) && (players.length===2
+                || (players.length>2 && players.length-game.result.length===2))) {
                 //same player
             }
-            if (skip && players.length>2) {
-                if(game.direction==="clockwise" )
-                    game.turn = playerSerial<players.length-1 ? "player"+(playerSerial+2) : "player1"
-                else if(game.direction==="anticlockwise")
-                    game.turn = playerSerial>2 ? "player"+(playerSerial-2) : players.pop()
+            else if (skip && players.length>2) {
+                for (let i=0; i<2; i++) {
+                    if(game.direction==="clockwise" ) {
+                        do{
+                            game.turn = playerSerial < players.length ? "player" + (playerSerial + 1) : "player1"
+                            playerSerial = Number([...game.turn].pop())
+                        } while (game.players[game.turn].position);
+                    }
+                    else if(game.direction==="anticlockwise") {
+                        do{
+                            game.turn = playerSerial > 1 ? "player" + (playerSerial - 1) : players.pop()
+                            playerSerial = Number([...game.turn].pop())
+                        } while (game.players[game.turn].position);
+                    }
+                }
             }
             else {
-                if(game.direction==="clockwise" )
-                    game.turn = playerSerial<players.length ? "player"+(playerSerial+1) : "player1"
-                else if(game.direction==="anticlockwise")
-                    game.turn = playerSerial>1 ? "player"+(playerSerial-1) : players.pop()
+                if(game.direction==="clockwise" ) {
+                    do{
+                        game.turn = playerSerial < players.length ? "player" + (playerSerial + 1) : "player1"
+                        playerSerial = Number([...game.turn].pop())
+                    } while (game.players[game.turn].position);
+                }
+                else if(game.direction==="anticlockwise") {
+                    do{
+                        game.turn = playerSerial > 1 ? "player" + (playerSerial - 1) : players.pop()
+                        playerSerial = Number([...game.turn].pop())
+                    } while (game.players[game.turn].position);
+                }
             }
             //Check other players uno
             players.map(playerId => {
@@ -216,10 +262,18 @@ class GameService extends ResponseService {
             game.players[userId].canDraw = true;
             let playerSerial = Number([...userId].pop())
 
-            if(game.direction==="clockwise" )
-                game.turn = playerSerial<players.length ? "player"+(playerSerial+1) : "player1"
-            else if(game.direction==="anticlockwise")
-                game.turn = playerSerial>1 ? "player"+(playerSerial-1) : players.pop()
+            if(game.direction==="clockwise" ) {
+                do{
+                    game.turn = playerSerial < players.length ? "player" + (playerSerial + 1) : "player1"
+                    playerSerial = Number([...game.turn].pop())
+                } while (game.players[game.turn].position);
+            }
+            else if(game.direction==="anticlockwise") {
+                do{
+                    game.turn = playerSerial > 1 ? "player" + (playerSerial - 1) : players.pop()
+                    playerSerial = Number([...game.turn].pop())
+                } while (game.players[game.turn].position);
+            }
 
             this.writeData('data.json', database)
 
@@ -326,7 +380,8 @@ class GameService extends ResponseService {
                     username,
                     cards: [],
                     uno: false,
-                    canDraw:true
+                    canDraw:true,
+                    position: null
                 }
                 this.writeData('data.json', database)
                 return this.response({username, gameId, userId}).success('Joined Game Successfully')
@@ -351,19 +406,20 @@ class GameService extends ResponseService {
                 players:{
                     player1: {
                         username: request.body.username,
-                        cards: [],
-                        uno: false,
-                        canDraw:true
+                        // cards: [],
+                        // uno: false,
+                        // canDraw:true,
+                        // position: null
                     }
                 },
                 gameStarted: false,
-                direction: "clockwise",
-                turn: "player2",
-                color: '',
-                cardsCount: 1,
-                result: [],
-                lastCards: [],
-                restCards: []
+                // direction: "clockwise",
+                // turn: "player2",
+                // color: '',
+                // cardsCount: 1,
+                // result: [],
+                // lastCards: [],
+                // restCards: []
             }
             this.writeData('data.json', database)
 

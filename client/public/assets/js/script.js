@@ -19,9 +19,14 @@ function handleSocketConnection() {
         console.log('connected')
     })
     socket.on('player-joining', async payload => {
+        await helper.sleep(1000)
         await startGamePopUp()
     })
-    socket.on('start-game', payload => {
+    socket.on('start-game', async payload => {
+        for (let i=1; i<=4; i++)
+            localStorage.removeItem(`player${i}_position`)
+
+        await helper.sleep(1000)
         game()
     })
 }

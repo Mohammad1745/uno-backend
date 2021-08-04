@@ -41,6 +41,11 @@ function handleLoadGameRequestSuccess(response) {
     localStorage.setItem('gameStarted', 'true')
     localStorage.setItem('turn', game.turn)
     localStorage.setItem('color', game.color)
+    if (game.gameEnded)
+        localStorage.setItem('gameEnded', 'true')
+    else
+        localStorage.removeItem('gameEnded')
+
     if (game.players[userId].canDraw)
         localStorage.setItem('cardsCount', game.cardsCount)
     else
@@ -52,9 +57,18 @@ function handleLoadGameRequestSuccess(response) {
         else
             localStorage.removeItem(playerId+"_uno")
     })
+
+    Object.keys(game.players).map(playerId => {
+        if (game.players[playerId].position) {
+            localStorage.setItem(playerId + "_position", game.players[playerId].position)
+            localStorage.removeItem(playerId + "_uno")
+        }
+    })
     updateGameContainers(game)
-    handleCardPlay()
-    handleUnoCall()
+    if (!game.gameEnded) {
+        handleCardPlay()
+        handleUnoCall()
+    }
 }
 
 function handleLoadGameRequestError(response) {
@@ -66,6 +80,7 @@ function updateGameContainers(game) {
     let gameContainer = document.getElementById('game_container')
     gameContainer.innerHTML = ''
 
+    let gameEnded = localStorage.getItem('gameEnded')
     let userId = localStorage.getItem('userId')
     let turnUser = localStorage.getItem('turn')
     let cardsCount = localStorage.getItem('cardsCount')
@@ -75,10 +90,11 @@ function updateGameContainers(game) {
     let html = ''
     Object.keys(game.players).map(key => {
         let uno = localStorage.getItem(key+"_uno") ? 'Uno' : ''
+        let position = localStorage.getItem(key+"_position") ? localStorage.getItem(key+"_position") : ''
         let player = game.players[key]
         html += `<div class="${key}-area" id="${key}_area">
             <div class="player-area-head" id="player_area_head">
-              ${player.username} <span class="float-right">${uno}</span>
+              ${player.username} <span class="float-right">${uno}${position}</span>
             </div>
             <div class="player-cards-area">`
         Object.keys(player.cards).map(index => {
@@ -94,21 +110,42 @@ function updateGameContainers(game) {
         })
         html += ` </div></div>`
     })
-    html += `<div class="mid">
+    html += `<div class="mid">`
+    if(gameEnded){
+        html += `<button id="play_again_btn" class="play-again-btn must" >Play Again</button>`
+    }else {
+        html += `
           <img class="card" src="./public/assets/images/cards/${game.lastCards[2]}.png">
           <img class="card" src="./public/assets/images/cards/${game.lastCards[1]}.png"  style="margin-left: -40px;">
           <img class="card" src="./public/assets/images/cards/${lastCard}.png"  style="margin-left: -40px;">`
-    if(Number(cardsCount) && turnUser === userId)
-        html += `<button id="draw_card_btn" class="draw-card" >Draw ${cardsCount} Cards</button>`
-    html += `<button id="uno_call_btn" class="uno-call">UNO</button>`
-    if(!Number(cardsCount) && turnUser === userId)
-        html +=`<button id="skip_btn" class="skip-btn">Skip</button>`
+
+        if(Number(cardsCount) && turnUser === userId)
+            html += `<button id="draw_card_btn" class="draw-card" >Draw ${cardsCount} Cards</button>`
+        html += `<button id="uno_call_btn" class="uno-call">UNO</button>`
+        if(!Number(cardsCount) && turnUser === userId)
+            html +=`<button id="skip_btn" class="skip-btn">Skip</button>`
+    }
     html += `</div>`
 
     gameContainer.insertAdjacentHTML('beforeend', html)
-    let turnUserHeader = document.querySelector("#"+turnUser+"_area").querySelector('#player_area_head')
-    turnUserHeader.classList.add('player-turn')
+    console.log(turnUser, gameEnded)
+    if (gameEnded)
+        handlePlayAgain()
+    else {
+        let turnUserHeader = document.querySelector("#" + turnUser + "_area").querySelector('#player_area_head')
+        turnUserHeader.classList.add('player-turn')
+    }
+
     updateGameContainerGrid(game.players, userId)
+}
+
+function handlePlayAgain() {
+    let playAgainButton = document.getElementById('play_again_btn')
+    playAgainButton.addEventListener('click', () => {
+        let gameId = localStorage.getItem('gameId')
+        socket.emit('start-game', 'game-started')
+        startGame(gameId)
+    })
 }
 
 function updateGameContainerGrid(players, userId) {
