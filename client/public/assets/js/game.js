@@ -45,8 +45,14 @@ function handleLoadGameRequestSuccess(response) {
         localStorage.setItem('cardsCount', game.cardsCount)
     else
         localStorage.setItem('cardsCount', 0)
+
+    Object.keys(game.players).map(playerId => {
+        if (game.players[playerId].uno)
+            localStorage.setItem(playerId+"_uno", 'true')
+    })
     updateGameContainers(game)
     handleCardPlay()
+    handleUnoCall()
 }
 
 function handleLoadGameRequestError(response) {
@@ -66,10 +72,11 @@ function updateGameContainers(game) {
 
     let html = ''
     Object.keys(game.players).map(key => {
+        let uno = localStorage.getItem(key+"_uno") ? 'Uno' : ''
         let player = game.players[key]
         html += `<div class="${key}-area" id="${key}_area">
             <div class="player-area-head" id="player_area_head">
-              ${player.username}
+              ${player.username} <span class="float-right">${uno}</span>
             </div>
             <div class="player-cards-area">`
         Object.keys(player.cards).map(index => {
@@ -97,7 +104,6 @@ function updateGameContainers(game) {
     html += `</div>`
 
     gameContainer.insertAdjacentHTML('beforeend', html)
-
     let turnUserHeader = document.querySelector("#"+turnUser+"_area").querySelector('#player_area_head')
     turnUserHeader.classList.add('player-turn')
     updateGameContainerGrid(game.players, userId)
@@ -264,6 +270,38 @@ function handleSkipPlayRequestSuccess(response) {
 }
 
 function handleSkipPlayRequestError(response) {
+    helper.alertMessage("error", response.message)
+    console.log(response.message)
+}
+
+function handleUnoCall () {
+    let gameId = localStorage.getItem('gameId')
+    let userId = localStorage.getItem('userId')
+    let unoCallButton = document.getElementById('uno_call_btn')
+    unoCallButton.addEventListener('click', () => {
+        socket.emit('card-played', 'play-card-success')
+        saveUnoCall({gameId, userId})
+    })
+}
+
+function saveUnoCall({gameId, userId}) {
+    $.ajax({
+        url: helper.DOMAIN + "/api/game/call-uno",
+        method: "POST",
+        data: {gameId, userId}
+    }).done(response => {
+        response.success ?
+            handleUnoCallRequestSuccess(response) :
+            handleUnoCallRequestError(response)
+    }).fail(err => {
+        console.log(err)
+    })
+}
+
+function handleUnoCallRequestSuccess(response) {
+}
+
+function handleUnoCallRequestError(response) {
     helper.alertMessage("error", response.message)
     console.log(response.message)
 }

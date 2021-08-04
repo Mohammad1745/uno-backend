@@ -274,6 +274,35 @@ class GameService extends ResponseService {
      * @param {Object} request
      * @return {Object}
      */
+    callUno = async request => {
+        try {
+            const gameId = request.body.gameId;
+            const userId = request.body.userId;
+
+            let database = this.readData('data.json')
+            let game = database.games[gameId]
+            if (!game) {
+                return this.response().error("Wrong Game Id!")
+            }
+            let player = game.players[userId]
+            let cardCount = player.cards.length
+            if (cardCount===1)
+                player.uno = true
+            else
+                return this.response().error("Not an uno call moment!")
+
+            this.writeData('data.json', database)
+
+            return this.response().success('Uno Call Successful')
+        } catch (e) {
+            return this.response().error(e.message)
+        }
+    }
+
+    /**
+     * @param {Object} request
+     * @return {Object}
+     */
     join = async request => {
         try {
             const username = request.body.username
