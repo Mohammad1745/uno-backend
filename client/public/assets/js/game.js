@@ -6,15 +6,12 @@ function game() {
 }
 
 function handleSocketGameEvents() {
-    socket.on('card-played', async payload => {
+    socket.on('game-updated', async payload => {
         let gameId = localStorage.getItem('gameId')
-        await helper.sleep(1000)
-        loadGameContainer(gameId)
-    })
-    socket.on('card-drawn', async payload => {
-        let gameId = localStorage.getItem('gameId')
-        await helper.sleep(1000)
-        loadGameContainer(gameId)
+        if(gameId && payload.gameId === gameId) {
+            await helper.sleep(1000)
+            loadGameContainer(gameId)
+        }
     })
 }
 
@@ -128,7 +125,6 @@ function updateGameContainers(game) {
     html += `</div>`
 
     gameContainer.insertAdjacentHTML('beforeend', html)
-    console.log(turnUser, gameEnded)
     if (gameEnded)
         handlePlayAgain()
     else {
@@ -195,13 +191,13 @@ function handleCardPlay () {
             drawCardButton.classList.add('must')
         }
         drawCardButton.addEventListener('click', () => {
-            socket.emit('card-drawn', 'draw-card-success')
+            socket.emit('game-updated', {gameId})
             saveCardDrawing({gameId, userId})
         })
     }
     if (!Number(cardsCount) && skipButton) {
         skipButton.addEventListener('click', () => {
-            socket.emit('card-played', 'play-card-success')
+            socket.emit('game-updated', {gameId})
             saveSkipping({gameId, userId})
         })
     }
@@ -214,7 +210,7 @@ function handleCardPlay () {
                 if(cardName[0]==='f' || cardName[0]==='c')
                     chooseColor({gameId, userId, cardName, color})
                 else {
-                    socket.emit('card-played', 'play-card-success')
+                    socket.emit('game-updated', {gameId})
                     saveCardPlay({gameId, userId, cardName, color})
                 }
 
@@ -242,7 +238,7 @@ function chooseColor({gameId, userId, cardName, color}) {
     chooseColorDom.addEventListener('click', event => {
         chooseColorDom.remove()
         color = event.target.getAttribute('data-color')
-        socket.emit('card-played', 'play-card-success')
+        socket.emit('game-updated', {gameId})
         saveCardPlay({gameId, userId, cardName, color})
     })
 }
@@ -318,7 +314,7 @@ function handleUnoCall () {
     let userId = localStorage.getItem('userId')
     let unoCallButton = document.getElementById('uno_call_btn')
     unoCallButton.addEventListener('click', () => {
-        socket.emit('card-played', 'play-card-success')
+        socket.emit('game-updated', {gameId})
         saveUnoCall({gameId, userId})
     })
 }

@@ -19,15 +19,20 @@ function handleSocketConnection() {
         console.log('connected')
     })
     socket.on('player-joining', async payload => {
-        await helper.sleep(1000)
-        await startGamePopUp()
+        let gameId = localStorage.getItem('gameId')
+        if (gameId && payload.gameId === gameId) {
+            await helper.sleep(1000)
+            await startGamePopUp()
+        }
     })
     socket.on('start-game', async payload => {
-        for (let i=1; i<=4; i++)
-            localStorage.removeItem(`player${i}_position`)
-
-        await helper.sleep(1000)
-        game()
+        let gameId = localStorage.getItem('gameId')
+        if (gameId && payload.gameId === gameId) {
+            for (let i=1; i<=4; i++)
+                localStorage.removeItem(`player${i}_position`)
+            await helper.sleep(1000)
+            game()
+        }
     })
 }
 
@@ -62,8 +67,10 @@ function joinGameButtonHandler() {
             helper.alertMessage("error", "Already has a game")
             await startGamePopUp()
         } else {
-            if (joinGameOption===joinGameOptions.joinGame)
+            if (joinGameOption===joinGameOptions.joinGame) {
+                socket.emit('player-joining', {gameId})
                 joinGame({username, gameId})
+            }
             else
                 createGame({username})
         }
@@ -104,8 +111,8 @@ async function handleJoinGameRequestSuccess(response) {
     localStorage.setItem('userId', userId)
     localStorage.setItem('username',  username)
     helper.alertMessage("success", response.message)
-    await helper.sleep(500)
-    socket.emit('player-joining', 'player-joined')
+    // await helper.sleep(500)
+    // socket.emit('player-joining', {gameId})
 }
 
 async function handleCreateGameRequestSuccess(response) {
@@ -138,7 +145,7 @@ async function startGamePopUp() {
     `)
     startGamePopUp.style.padding = "10px"
     document.getElementById('popup_game_id').style.color = 'black'
-    await helper.sleep(500)
+    await helper.sleep(1000)
     showPlayerList(gameId)
     handleStartGameButton()
 }
@@ -178,7 +185,7 @@ function handleStartGameButton() {
 
     startButton.addEventListener('click', async () => {
         let gameId = localStorage.getItem('gameId')
-        socket.emit('start-game', 'game-started')
+        socket.emit('start-game', {gameId})
         startGame(gameId)
     })
 }

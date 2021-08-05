@@ -63,12 +63,13 @@ class GameService extends ResponseService {
                 game.lastCards =  cards.filter((card, indx) => (indx >= index && indx <= index+2))
                 index += 3
                 game.restCards =  cards.filter((card, indx) => (indx >= index))
+                game.color = game.lastCards[0][1]
                 game.gameStarted = true
                 game.gameEnded = false
                 game.turn = "player2"
                 game.direction = "clockwise"
                 game.cardsCount = 1
-                game.color = game.lastCards[0][1]
+                game.result = []
                 this.writeData('data.json', database)
                 return this.response().success('Joined Game Successfully')
             }

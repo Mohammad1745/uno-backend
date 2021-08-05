@@ -18,11 +18,8 @@ module.exports = server => {
         socket.on('start-game', payload => {
             io.emit('start-game', payload)
         })
-        socket.on('card-played', payload => {
-            io.emit('card-played', payload)
-        })
-        socket.on('card-drawn', payload => {
-            io.emit('card-drawn', payload)
+        socket.on('game-updated', payload => {
+            io.emit('game-updated', payload)
         })
 
         socket.on('disconnect', () => {
