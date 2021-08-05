@@ -30,7 +30,6 @@ function loadGameContainer(gameId) {
 }
 
 function handleLoadGameRequestSuccess(response) {
-    console.log(response.data)
     let game = response.data
     let gameLoginForm = document.getElementById('game_login')
     gameLoginForm.style.display = 'none'
@@ -71,6 +70,8 @@ function handleLoadGameRequestSuccess(response) {
 function handleLoadGameRequestError(response) {
     helper.alertMessage("error", response.message)
     console.log(response.message)
+    localStorage.clear()
+    location.reload()
 }
 
 function updateGameContainers(game) {
@@ -180,12 +181,10 @@ function handleCardPlay () {
     let userId = localStorage.getItem('userId')
     let gameId = localStorage.getItem('gameId')
     let cardsCount = localStorage.getItem('cardsCount')
-    // let turnUserHeader = document.querySelector("#"+turnUser+"_area").querySelector('#player_area_head')
-    // turnUserHeader.style.backgroundColor = "#F2EDD7"
-    // turnUserHeader.style.color = "black"
     let playableCards = document.querySelectorAll('.playable-card')
     let drawCardButton = document.getElementById('draw_card_btn')
     let skipButton = document.getElementById('skip_btn')
+
     if (Number(cardsCount) && drawCardButton){
         if (!playableCards.length && turnUser === userId) {
             drawCardButton.classList.add('must')
@@ -205,7 +204,6 @@ function handleCardPlay () {
         if(turnUser===userId){
             card.addEventListener('click', event => {
                 let cardName = event.target.getAttribute('data-name')
-                console.log(cardName, 'card-name')
                 let color = cardName[1]
                 if(cardName[0]==='f' || cardName[0]==='c')
                     chooseColor({gameId, userId, cardName, color})
