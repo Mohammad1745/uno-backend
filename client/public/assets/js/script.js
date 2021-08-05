@@ -9,7 +9,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     handleSocketConnection()
     joinGameMenuHandler()
     joinGameButtonHandler()
-    if(localStorage.getItem('gameId')) await startGamePopUp()
+    if(localStorage.getItem('gameId'))
+        await startGamePopUp()
     if(localStorage.getItem('gameStarted')) {
         game()
         chat()
@@ -65,16 +66,14 @@ function joinGameButtonHandler() {
 
     joinButton.addEventListener('click', async () => {
         const username = document.getElementById('username').value
-        const gameId = document.getElementById('game_id').value
+        let gameId = document.getElementById('game_id').value
 
         if(localStorage.getItem('gameId')){
             helper.alertMessage("error", "Already has a game")
             await startGamePopUp()
         } else {
-            if (joinGameOption===joinGameOptions.joinGame) {
-                socket.emit('player-joining', {gameId})
+            if (joinGameOption===joinGameOptions.joinGame)
                 joinGame({username, gameId})
-            }
             else
                 createGame({username})
         }
@@ -115,8 +114,8 @@ async function handleJoinGameRequestSuccess(response) {
     localStorage.setItem('userId', userId)
     localStorage.setItem('username',  username)
     helper.alertMessage("success", response.message)
-    // await helper.sleep(500)
-    // socket.emit('player-joining', {gameId})
+    await helper.sleep(500)
+    socket.emit('player-joining', {gameId})
 }
 
 async function handleCreateGameRequestSuccess(response) {
@@ -182,6 +181,8 @@ function handlePlayerListRequestSuccess(response) {
 function handlePlayerListRequestError(response) {
     helper.alertMessage("error", response.message)
     console.log(response.message)
+    localStorage.clear()
+    location.reload()
 }
 
 function handleStartGameButton() {
