@@ -8,8 +8,8 @@ module.exports = server => {
     io.on("connection", socket => {
         console.log(socket.id)
 
-        socket.on('message', payload => {
-            io.emit('message', payload)
+        socket.on('chat-updated', payload => {
+            io.emit('chat-updated', payload)
         })
 
         socket.on('player-joining', payload => {

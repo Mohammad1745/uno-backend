@@ -1,3 +1,4 @@
+let x = 1
 function chat() {
     let gameId = localStorage.getItem('gameId')
     let userId = localStorage.getItem('userId')
@@ -8,7 +9,8 @@ function chat() {
 function handleSocketChatEvents({gameId, userId}) {
     socket.on('chat-updated', async payload => {
         if(gameId && payload.gameId === gameId) {
-            await helper.sleep(1000)
+            await helper.sleep(100)
+            updateChatStorage({userId, payload})
             updateChatContainer({userId, payload})
         }
     })
@@ -20,11 +22,11 @@ function loadChatContainer({gameId, userId}) {
             <div class="chat-header">
                 Game Chat: ${gameId} 
                 <span class="float-right open-chat cursor-pointer" id="open_chat_btn" data-state="open">
-                    <i class="fas fa-caret-square-up"></i>
+                    <i class="fas fa-caret-square-down"></i>
                 </span>
             </div>
             <div class="chat-body" id="chat_body">
-                <ul class="chat-details" id="chat_details"></ul>
+                <ul class="chat-details ml-0" id="chat_details"></ul>
                 <div class="chat-input form-group" id="chat_input">
                     <input type="text" class="message-input" id="message_input">
                     <button type="button" id="send_message_btn" class="btn btn-primary send-message-btn"><i class="fas fa-paper-plane"></i></button>
@@ -32,8 +34,13 @@ function loadChatContainer({gameId, userId}) {
             </div>
         </div>`
     document.body.insertAdjacentHTML('beforeend', chatPopup)
+    let chat = JSON.parse(localStorage.getItem('chat'))
+    if (chat)
+        chat.map(payload =>updateChatContainer({userId, payload}))
+    else
+        localStorage.setItem('chat', JSON.stringify([]))
     handleOpenChatButton()
-    handleSendMessageButton(userId)
+    handleSendMessageButton({gameId, userId})
 }
 
 //Sending Message
@@ -44,10 +51,12 @@ function handleOpenChatButton() {
     openChatButton.addEventListener("click", () => {
         let state = openChatButton.getAttribute('data-state')
         if (state==="open"){
+            openChatButton.innerHTML = `<i class="fas fa-caret-square-up"></i>`
             openChatButton.setAttribute('data-state', "close")
             chatDetails.style.display = "none"
             chatBody.style.display = "none"
         }else {
+            openChatButton.innerHTML = `<i class="fas fa-caret-square-down"></i>`
             openChatButton.setAttribute('data-state', "open")
             chatDetails.style.display = "block"
             chatBody.style.display = "block"
@@ -56,21 +65,33 @@ function handleOpenChatButton() {
 }
 
 //Sending Message
-function handleSendMessageButton(userId) {
+function handleSendMessageButton({gameId, userId}) {
+    let messageInput = document.getElementById('message_input')
     let sendMessageButton = document.getElementById('send_message_btn')
+    messageInput.addEventListener("keypress", event => {
+        if (event.keyCode===13){
+            sendMessage ({gameId, userId})
+        }
+    })
     sendMessageButton.addEventListener("click", () => {
-        let message = document.getElementById('message_input').value
-        if (message) sendMessage({userId, message})
+        sendMessage ({gameId, userId})
     })
 }
-
-function sendMessage({userId, message}) {
-    let messageInput = document.getElementById('message_input')
-    messageInput.value = ''
-    let time = helper.getTime(new Date())
-    socket.emit("chat-updated", { userId, content: message, time })
+function sendMessage({gameId, userId}) {
+    let username = localStorage.getItem('username')
+    let message = document.getElementById('message_input').value
+    if (message) {
+        let time = helper.getTime(new Date())
+        document.getElementById('message_input').value = ''
+        socket.emit("chat-updated", { gameId, userId, username,content: message, time })
+    }
 }
 
+function updateChatStorage({userId, payload}) {
+    let chat = JSON.parse(localStorage.getItem('chat'))
+    chat.push(payload)
+    localStorage.setItem('chat', JSON.stringify(chat))
+}
 function updateChatContainer({userId, payload}) {
     if (payload.userId===userId)
         appendOutgoingMessage(payload)
@@ -83,7 +104,7 @@ function appendIncomingMessage(message) {
     document.querySelector('#chat_details').insertAdjacentHTML('beforeend', `
         <li class="incoming-message-list" id="s${++x}">
             <div class="p-2 incoming-message-content">
-                <span>${message.userId}</span> ${message.content}<span style="font-size: 9px;"> -${time}</span>
+                <span class="sender-name">${message.username}</span> : ${message.content}<span style="font-size: 9px;"> -${time}</span>
             </div>
         </li>
     `)

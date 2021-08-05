@@ -486,37 +486,29 @@ body{
 
 
 /* CHAT SECTION */
-.chat-container,
-.messages {
+.chat-container {
   /*display: none;*/
   position: fixed;
   background-color: var(--secondary);
   color: var(--primary);
   padding: 10px;
   border-radius: 10px;
-  bottom: 120px;
-  right: 15px;
+  bottom: 85px;
+  right: 5px;
   z-index: 9;
-  width: 20vw;
+  width: 30vw;
 }
 
-.chat-details,
-.list-ul{
+.chat-details {
   list-style-type: none;
   -webkit-padding-start: 0;
   height: 50vh;
+  overflow-y: scroll;
   border-top: 1px solid #000;
   border-bottom: 1px solid #000;
 }
-.list-li {
-  flex: 0 0 auto;
-  font-family: monospace;
-  background-color: var(--primary);
-  color: var(--secondary);
-  margin: 3px;
-  padding: 5px;
-  border: none;
-  border-radius: 10px;
+.sender-name {
+  color: var(--third);
 }
 .incoming-message-list,
 .outgoing-message-list {
@@ -529,19 +521,20 @@ body{
 .outgoing-message-list {
   margin-left: 30%;
 }
-.incoming-message-content {
-  border-radius: 5px;
-  background-color: #ddd;
-  width: fit-content;
-}
+.incoming-message-content,
 .outgoing-message-content {
   border-radius: 5px;
+  width: fit-content;
+  font-size: 20px;
+}
+.incoming-message-content {
+  background-color: #ddd;
+}
+.outgoing-message-content {
   background-color: #278;
   color: #fff;
-  width: fit-content;
 }
-.message-input,
-.input-message{
+.message-input {
   width: 80%;
   background-color: white;
   padding: 0 10px;
@@ -564,33 +557,26 @@ body{
   cursor: pointer;
 }
 
-.send-message-btn:hover{
-  background-color: var(--fourth);
-}
-
 .open-chat{
   border: none;
   font-weight: bold;
   color: var(--third);
 }
-.open-chat:hover{
-  color: var(--secondary);
-}
 
-.close-chat{
-  background-color: red;
-  border: none;
-  color: var(--secondary);
-  padding: 10px 20px;
-  border-radius: 5px;
-  text-decoration: none;
-  cursor: pointer;
-  width: 300px;
-  margin-top: 10px;
-}
-.close-chat:hover{
-  background-color: var(--third);
-}
+/*.close-chat{*/
+/*  background-color: red;*/
+/*  border: none;*/
+/*  color: var(--secondary);*/
+/*  padding: 10px 20px;*/
+/*  border-radius: 5px;*/
+/*  text-decoration: none;*/
+/*  cursor: pointer;*/
+/*  width: 300px;*/
+/*  margin-top: 10px;*/
+/*}*/
+/*.close-chat:hover{*/
+/*  background-color: var(--third);*/
+/*}*/
 
 /* FOOTER */
 
