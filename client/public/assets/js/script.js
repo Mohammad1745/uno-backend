@@ -10,7 +10,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     joinGameMenuHandler()
     joinGameButtonHandler()
     if(localStorage.getItem('gameId')) await startGamePopUp()
-    if(localStorage.getItem('gameStarted')) game()
+    if(localStorage.getItem('gameStarted')) {
+        game()
+        chat()
+    }
 })
 
 function handleSocketConnection() {
@@ -32,6 +35,7 @@ function handleSocketConnection() {
                 localStorage.removeItem(`player${i}_position`)
             await helper.sleep(1000)
             game()
+            chat()
         }
     })
 }

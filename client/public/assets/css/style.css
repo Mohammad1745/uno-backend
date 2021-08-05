@@ -486,23 +486,27 @@ body{
 
 
 /* CHAT SECTION */
-
+.chat-container,
 .messages {
-  display: none;
+  /*display: none;*/
   position: fixed;
   background-color: var(--secondary);
   color: var(--primary);
   padding: 10px;
   border-radius: 10px;
-  bottom: 20px;
+  bottom: 120px;
   right: 15px;
   z-index: 9;
-  width: 320px;
+  width: 20vw;
 }
 
+.chat-details,
 .list-ul{
   list-style-type: none;
   -webkit-padding-start: 0;
+  height: 50vh;
+  border-top: 1px solid #000;
+  border-bottom: 1px solid #000;
 }
 .list-li {
   flex: 0 0 auto;
@@ -514,11 +518,33 @@ body{
   border: none;
   border-radius: 10px;
 }
-
+.incoming-message-list,
+.outgoing-message-list {
+  margin-top:5px;
+  list-style-type: none;
+}
+.incoming-message-list {
+  margin-right: 30%;
+}
+.outgoing-message-list {
+  margin-left: 30%;
+}
+.incoming-message-content {
+  border-radius: 5px;
+  background-color: #ddd;
+  width: fit-content;
+}
+.outgoing-message-content {
+  border-radius: 5px;
+  background-color: #278;
+  color: #fff;
+  width: fit-content;
+}
+.message-input,
 .input-message{
-  width: 75%;
+  width: 80%;
   background-color: white;
-  padding: 10px;
+  padding: 0 10px;
   border: 1px solid var(--third);
   resize: none;
   border-radius: 5px;
@@ -529,8 +555,8 @@ body{
 
 }
 
-.send-message{
-  padding: 10px;
+.send-message-btn{
+  /*padding: 10px;*/
   border: none;
   background-color: var(--third);
   border-radius: 5px;
@@ -538,25 +564,16 @@ body{
   cursor: pointer;
 }
 
-.send-message:hover{
+.send-message-btn:hover{
   background-color: var(--fourth);
 }
 
 .open-chat{
-  background-color: var(--secondary);
   border: none;
   font-weight: bold;
   color: var(--third);
-  padding: 10px 20px;
-  border-radius: 5px;
-  cursor: pointer;
-  position: fixed;
-  bottom: 23px;
-  right: 28px;
-  width: 300px;
 }
 .open-chat:hover{
-  background-color: var(--third);
   color: var(--secondary);
 }
 
