@@ -31,11 +31,13 @@ function handleSocketConnection() {
     })
     socket.on('start-game', async payload => {
         let gameId = localStorage.getItem('gameId')
+        let chatContent = localStorage.getItem('chat')
         if (gameId && payload.gameId === gameId) {
             for (let i=1; i<=4; i++)
                 localStorage.removeItem(`player${i}_position`)
             await helper.sleep(1000)
             game()
+            if(!chatContent) chat()
         }
     })
 }
