@@ -27,6 +27,8 @@ function loadChatContainer({gameId, userId}) {
             </div>
             <div class="chat-body" id="chat_body">
                 <ul class="chat-details ml-0" id="chat_details"></ul>
+            </div>
+            <div class="chat-footer" id="chat_footer">
                 <div class="chat-input form-group" id="chat_input">
                     <input type="text" class="message-input" id="message_input">
                     <button type="button" id="send_message_btn" class="btn btn-primary send-message-btn"><i class="fas fa-paper-plane"></i></button>
@@ -45,7 +47,7 @@ function loadChatContainer({gameId, userId}) {
 
 //Sending Message
 function handleOpenChatButton() {
-    let chatBody = document.getElementById('chat_body')
+    let chatFooter = document.getElementById('chat_footer')
     let chatDetails = document.getElementById('chat_details')
     let openChatButton = document.getElementById('open_chat_btn')
     openChatButton.addEventListener("click", () => {
@@ -53,13 +55,13 @@ function handleOpenChatButton() {
         if (state==="open"){
             openChatButton.innerHTML = `<i class="fas fa-caret-square-up"></i>`
             openChatButton.setAttribute('data-state', "close")
-            chatDetails.style.display = "none"
-            chatBody.style.display = "none"
+            chatDetails.style.height = "10vh"
+            chatFooter.style.display = "none"
         }else {
             openChatButton.innerHTML = `<i class="fas fa-caret-square-down"></i>`
             openChatButton.setAttribute('data-state', "open")
-            chatDetails.style.display = "block"
-            chatBody.style.display = "block"
+            chatDetails.style.height = "50vh"
+            chatFooter.style.display = "block"
         }
     })
 }
