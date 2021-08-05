@@ -137,7 +137,6 @@ function updateGameContainers(game) {
 }
 
 function handlePlayAgain() {
-    let gameId = localStorage.getItem('gameId')
     let playAgainButton = document.getElementById('play_again_btn')
     playAgainButton.addEventListener('click', () => {
         let gameId = localStorage.getItem('gameId')

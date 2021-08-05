@@ -36,7 +36,6 @@ function handleSocketConnection() {
                 localStorage.removeItem(`player${i}_position`)
             await helper.sleep(1000)
             game()
-            chat()
         }
     })
 }
