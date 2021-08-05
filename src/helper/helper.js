@@ -1,10 +1,3 @@
-const crypto = require('crypto')
-const twilioClient = require('twilio')(process.env.TWILIO_SID, process.env.TWILIO_TOKEN)
-const fs = require('fs')
-const path = require('path')
-const multer = require('multer')
-const util = require('util')
-
 module.exports = {
     Cards: () => {
         return [
