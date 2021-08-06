@@ -139,7 +139,6 @@ async function handleCreateGameRequestSuccess(response) {
 
 function handleJoinGameRequestError(response) {
     helper.alertMessage("error", response.message)
-    console.log(response.message)
 }
 
 async function startGamePopUp() {
@@ -179,7 +178,6 @@ function showPlayerList (gameId) {
 
 function handlePlayerListRequestSuccess(response) {
     let playerList = response.data
-    console.log(playerList)
     let playerListDom = document.getElementById('player_list')
     playerListDom.innerHTML = ''
     Object.keys(playerList).map(key => {
@@ -190,7 +188,6 @@ function handlePlayerListRequestSuccess(response) {
 
 function handlePlayerListRequestError(response) {
     helper.alertMessage("error", response.message)
-    console.log(response.message)
     localStorage.clear()
     location.reload()
 }
