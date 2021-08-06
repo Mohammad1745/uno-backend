@@ -21,6 +21,9 @@ module.exports = server => {
         socket.on('game-updated', payload => {
             io.emit('game-updated', payload)
         })
+        socket.on('player-quiting', payload => {
+            io.emit('player-quiting', payload)
+        })
 
         socket.on('disconnect', () => {
            console.log('disconnected')

@@ -471,6 +471,30 @@ class GameService extends ResponseService {
         }
     }
 
+    /**
+     * @param {Object} request
+     * @return {Object}
+     */
+    quitGame = async request => {
+        try {
+            const gameId = request.query.gameId;
+            const userId = request.query.userId;
+            const username = request.query.username;
+            let database = this._readData('data.json')
+
+            let game = database.games[gameId]
+            if (!game||!game.players[userId].username===username) {
+                return this.response().error("Wrong Game Id")
+            }
+            delete database.games[gameId]
+            this._writeData('data.json', database)
+
+            return this.response().success('Game Deleted Successfully')
+        } catch (e) {
+            return this.response().error(e.message)
+        }
+    }
+
     _readData = (filename) => {
         let data = fs.readFileSync(path.join(__dirname, filename), err => {
             if (err) throw err

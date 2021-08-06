@@ -16,6 +16,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     handleSocketConnection()
     joinGameMenuHandler()
     joinGameButtonHandler()
+    quitGameButtonHandler()
     if(localStorage.getItem('gameId'))
         await startGamePopUp()
     if(localStorage.getItem('gameStarted')) {
@@ -48,6 +49,11 @@ function handleSocketConnection() {
             game()
             if(!chatContent) chat()
         }
+    })
+    socket.on('player-quiting', async payload => {
+        let gameId = localStorage.getItem('gameId')
+        if (gameId && payload.gameId === gameId)
+            location.reload()
     })
 }
 
@@ -223,5 +229,39 @@ function startGame(gameId) {
 function handleStartGameRequestError(response) {
     if(response.data.gameStarted)
         localStorage.setItem('gameStarted', 'true')
+    helper.alertMessage("error", response.message)
+}
+
+function quitGameButtonHandler() {
+    const quitButton = document.getElementById('quit_btn')
+
+    quitButton.addEventListener('click', async () => {
+        let gameId = localStorage.getItem('gameId')
+        const userId = localStorage.getItem('userId')
+        const username = localStorage.getItem('username')
+        socket.emit('player-quiting', {gameId})
+        quitGame({userId, gameId, username})
+    })
+}
+
+function quitGame ({userId, username, gameId}) {
+    $.ajax({
+        url: helper.DOMAIN + "/api/game/quit",
+        method: "GET",
+        data: {userId, gameId, username}
+    }).done(response => {
+        response.success ?
+            handleQuitGameRequestSuccess(response) :
+            handleQuitGameRequestError(response)
+    }).fail(err => {
+        console.log(err)
+    })
+}
+
+
+function handleQuitGameRequestSuccess(response) {
+}
+
+function handleQuitGameRequestError(response) {
     helper.alertMessage("error", response.message)
 }

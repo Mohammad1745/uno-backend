@@ -88,6 +88,15 @@ class GameController {
     callUno = async (request, response) => {
         return response.json(await this.service.callUno(request))
     }
+
+    /**
+     * @param {Object} request
+     * @param {Object} response
+     * @return {JSON}
+     */
+    quitGame = async (request, response) => {
+        return response.json(await this.service.quitGame(request))
+    }
 }
 
 module.exports = new GameController()

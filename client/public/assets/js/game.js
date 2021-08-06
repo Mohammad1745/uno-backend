@@ -141,6 +141,8 @@ async function updateGameContainers(game) {
 
     updateGameContainerGrid(game.players, userId)
 
+    document.getElementById('quit_btn').style.display = "block"
+
     if(autoSkip && !Number(cardsCount) && turnUser === userId) {
         turnUserHeader.innerHTML = "Auto Skip"
         await helper.sleep(1000)

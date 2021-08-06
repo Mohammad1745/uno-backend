@@ -49,6 +49,7 @@ body{
   color: red;
 }
 .quit-btn {
+  display: none;
   border: none;
   padding: 5px 10px;
   background-color: red;

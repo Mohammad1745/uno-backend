@@ -12,5 +12,6 @@ route.post('/play-card', gameController.playCard)
 route.post('/skip-play', gameController.skipPlay)
 route.post('/draw-card', gameController.drawCard)
 route.post('/call-uno', gameController.callUno)
+route.get('/quit', gameController.quitGame)
 
 module.exports = route
