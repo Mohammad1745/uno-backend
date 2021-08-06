@@ -204,7 +204,6 @@ function handleCardPlay () {
         if(turnUser===userId){
             card.addEventListener('click', event => {
                 let cardName = event.target.getAttribute('data-name')
-                console.log('click')
                 let color = cardName[1]
                 if(cardName[0]==='f' || cardName[0]==='c')
                     chooseColor({gameId, userId, cardName, color})
