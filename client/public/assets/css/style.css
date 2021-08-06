@@ -269,16 +269,15 @@ body{
 }
 .player-turn {
   background-color : #F2EDD7;
+  border: 2px solid var(--secondary);
   color : black;
-  animation-name: turnborder;
-  animation-duration: 1s;
-  animation-iteration-count: infinite;
+  animation: turnborder 2s infinite;
 }
 
 @keyframes turnborder {
-  0% {border: 3px solid black;}
-  50% {border: 3px solid var(--secondary);}
-  100% {border: 3px solid black;}
+  0% {background-color: #fff;}
+  50% {background-color: #ddd;}
+  100% {background-color: #fff;}
 }
 
 .player-cards-area{
