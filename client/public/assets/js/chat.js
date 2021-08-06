@@ -10,6 +10,7 @@ function handleSocketChatEvents({gameId, userId}) {
     socket.on('chat-updated', async payload => {
         if(gameId && payload.gameId === gameId) {
             await helper.sleep(100)
+            audio.newMessage.play()
             updateChatStorage({userId, payload})
             updateChatContainer({userId, payload})
         }

@@ -10,6 +10,7 @@ function handleSocketGameEvents() {
         let gameId = localStorage.getItem('gameId')
         if(gameId && payload.gameId === gameId) {
             await helper.sleep(1000)
+            audio.cardFlick.play()
             loadGameContainer(gameId)
         }
     })
@@ -37,8 +38,10 @@ function handleLoadGameRequestSuccess(response) {
     localStorage.setItem('gameStarted', 'true')
     localStorage.setItem('turn', game.turn)
     localStorage.setItem('color', game.color)
-    if (game.gameEnded)
+    if (game.gameEnded) {
+        audio.gameCompleted.play()
         localStorage.setItem('gameEnded', 'true')
+    }
     else
         localStorage.removeItem('gameEnded')
 

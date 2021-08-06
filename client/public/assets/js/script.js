@@ -5,6 +5,13 @@ let joinGameOptions = {
 let joinGameOption = joinGameOptions.createGame
 let socket
 
+let audio = {
+    newMessage : new Audio("./public/assets/sounds/new-message.mp3"),
+    cardFlick : new Audio("./public/assets/sounds/card-flick.mp3"),
+    cardDeckShuffle : new Audio("./public/assets/sounds/card-deck-shuffle.mp3"),
+    gameCompleted : new Audio("./public/assets/sounds/game-completed.mp3")
+}
+
 document.addEventListener("DOMContentLoaded", async () => {
     handleSocketConnection()
     joinGameMenuHandler()
@@ -25,6 +32,7 @@ function handleSocketConnection() {
     socket.on('player-joining', async payload => {
         let gameId = localStorage.getItem('gameId')
         if (gameId && payload.gameId === gameId) {
+            audio.cardFlick.play()
             await helper.sleep(1000)
             await startGamePopUp()
         }
@@ -33,6 +41,7 @@ function handleSocketConnection() {
         let gameId = localStorage.getItem('gameId')
         let chatContent = localStorage.getItem('chat')
         if (gameId && payload.gameId === gameId) {
+            audio.cardDeckShuffle.play()
             for (let i=1; i<=4; i++)
                 localStorage.removeItem(`player${i}_position`)
             await helper.sleep(1000)
