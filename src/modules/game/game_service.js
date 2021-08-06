@@ -46,6 +46,10 @@ class GameService extends ResponseService {
             if (!game) {
                 return this.response().error("Wrong Game Id")
             }
+            let players = Object.keys(game.players)
+            if(players.length===1){
+                return this.response().error("Multiple Players Required")
+            }
             else if (game.gameStarted && !game.gameEnded) {
                 return this.response(game).error("Game Already Started")
             }
