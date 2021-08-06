@@ -21,16 +21,16 @@ function loadGameContainer(gameId) {
         url: helper.DOMAIN + "/api/game/game",
         method: "GET",
         data: {gameId}
-    }).done(response => {
+    }).done(async response => {
         response.success ?
-            handleLoadGameRequestSuccess(response) :
+            await handleLoadGameRequestSuccess(response) :
             handleLoadGameRequestError(response)
     }).fail(err => {
         console.log(err)
     })
 }
 
-function handleLoadGameRequestSuccess(response) {
+async function handleLoadGameRequestSuccess(response) {
     let game = response.data
     let gameLoginForm = document.getElementById('game_login')
     gameLoginForm.style.display = 'none'
@@ -63,7 +63,7 @@ function handleLoadGameRequestSuccess(response) {
             localStorage.removeItem(playerId + "_uno")
         }
     })
-    updateGameContainers(game)
+    await updateGameContainers(game)
     if (!game.gameEnded) {
         handleCardPlay()
         handleUnoCall()
@@ -77,17 +77,18 @@ function handleLoadGameRequestError(response) {
     location.reload()
 }
 
-function updateGameContainers(game) {
+async function updateGameContainers(game) {
     let gameContainer = document.getElementById('game_container')
     gameContainer.innerHTML = ''
 
     let gameEnded = localStorage.getItem('gameEnded')
+    let gameId = localStorage.getItem('gameId')
     let userId = localStorage.getItem('userId')
     let turnUser = localStorage.getItem('turn')
     let cardsCount = localStorage.getItem('cardsCount')
     let color = localStorage.getItem('color')
     let lastCard = game.lastCards[0][0]==='f' || game.lastCards[0][0]==='c' ? game.lastCards[0]+color :  game.lastCards[0]
-
+    let autoSkip = true
     let html = ''
     Object.keys(game.players).map(key => {
         let uno = localStorage.getItem(key+"_uno") ? 'Uno' : ''
@@ -101,8 +102,10 @@ function updateGameContainers(game) {
         Object.keys(player.cards).map(index => {
             let rotation = (index-((player.cards.length-1)/2))*15
             if (key===userId && (Number(cardsCount)<=1 && (game.lastCards[0][0] === player.cards[index][0] || player.cards[index][1] === color || player.cards[index][1] === "C")
-            || (Number(cardsCount)>1 && ['d','f','c'].includes(player.cards[index][0]))))
+            || (Number(cardsCount)>1 && ['d','f','c'].includes(player.cards[index][0])))) {
+                autoSkip = false
                 html += `<img src="./public/assets/images/cards/${player.cards[index]}.png" data-name="${player.cards[index]}" class="card card-stack playable-card cursor-pointer" style="transform: rotate(${rotation}deg);">`
+            }
             else {
                 let className = key === userId ? "card-stack" : "card-stack-others"
                 let imageName = key === userId ? player.cards[index] : "uno"
@@ -129,14 +132,21 @@ function updateGameContainers(game) {
     html += `</div>`
 
     gameContainer.insertAdjacentHTML('beforeend', html)
+
+    let turnUserHeader = document.querySelector("#" + turnUser + "_area").querySelector('#player_area_head')
     if (gameEnded)
         handlePlayAgain()
-    else {
-        let turnUserHeader = document.querySelector("#" + turnUser + "_area").querySelector('#player_area_head')
+    else
         turnUserHeader.classList.add('player-turn')
-    }
 
     updateGameContainerGrid(game.players, userId)
+
+    if(autoSkip && !Number(cardsCount) && turnUser === userId) {
+        turnUserHeader.innerHTML = "Auto Skip"
+        await helper.sleep(1000)
+        socket.emit('game-updated', {gameId})
+        saveSkipping({gameId, userId})
+    }
 }
 
 function handlePlayAgain() {
