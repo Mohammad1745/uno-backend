@@ -454,7 +454,7 @@ class GameService extends ResponseService {
         try {
             const username = request.body.username
             let database = this._readData('data.json')
-            let gameId = String(Object.keys(database.games).length+111111)
+            let gameId = String(Date.now())
             let userId = "player1"
             database.games[gameId] = {
                 gameId,
